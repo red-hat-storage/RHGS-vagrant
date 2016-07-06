@@ -7,8 +7,8 @@ VAGRANT_ROOT = File.dirname(File.expand_path(__FILE__))
 #Disable parallel runs - breaks peer probe in the end
 ENV['VAGRANT_NO_PARALLEL'] = 'no'
 
-VBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_vb_RHGS3.1U2.box"
-LVBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_lv_RHGS3.1U2.box"
+VBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_vb_RHGS3.1U3.box"
+LVBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_lv_RHGS3.1U3.box"
 numberOfVMs = 0
 numberOfDisks = -1
 
@@ -79,7 +79,7 @@ def vBoxAttachDisks(numDisk, provider, boxName)
     unless File.exist?(file_to_disk)
       provider.customize ['createhd', '--filename', file_to_disk, '--size', 100 * 1024] # 30GB brick device
     end
-    provider.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', i, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+    provider.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', i, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
 end
 
@@ -100,6 +100,7 @@ Vagrant.configure(2) do |config|
 
       copycat.vm.provider "virtualbox" do |vb, override|
         override.vm.box = VBOXURL
+#        override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
@@ -114,6 +115,7 @@ Vagrant.configure(2) do |config|
 
       copycat.vm.provider "libvirt" do |lv, override|
         override.vm.box = LVBOXURL
+        override.vm.synced_folder '.', '/vagrant', type: 'rsync'
       
         # Customize the amount of memory and vCPU in the VM:
         lv.memory = VMMEM
@@ -134,6 +136,7 @@ Vagrant.configure(2) do |config|
     
     mainbox.vm.provider "virtualbox" do |vb, override|
       override.vm.box = VBOXURL
+#      override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
       # Don't display the VirtualBox GUI when booting the machine
       vb.gui = false
@@ -148,6 +151,7 @@ Vagrant.configure(2) do |config|
     
     mainbox.vm.provider "libvirt" do |lv, override|
       override.vm.box = LVBOXURL
+      override.vm.synced_folder '.', '/vagrant', type: 'rsync'
     
       # Customize the amount of memory and vCPU in the VM:
       lv.memory = VMMEM
