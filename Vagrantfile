@@ -67,9 +67,9 @@ end
 
 environment.close
 
-hostsFile = "192.168.15.200 RHGS1\n"
+hostsFile = "192.168.10.200 RHGS1\n"
 (2..numberOfVMs).each do |num|
-  hostsFile += "192.168.15.#{( 98 + num).to_s} RHGS#{num.to_s}\n"
+  hostsFile += "192.168.10.#{( 98 + num).to_s} RHGS#{num.to_s}\n"
 end
 
 
@@ -95,7 +95,7 @@ Vagrant.configure(2) do |config|
   (2..numberOfVMs).each do |vmNum|
     config.vm.define "RHGS#{vmNum.to_s}" do |copycat|
       # This will be the private VM-only network where GlusterFS traffic will flow
-      copycat.vm.network "private_network", ip: ( "192.168.15." + (98 + vmNum).to_s )
+      copycat.vm.network "private_network", ip: ( "192.168.10." + (98 + vmNum).to_s )
       copycat.vm.hostname = "RHGS#{vmNum.to_s}"
 
       copycat.vm.provider "virtualbox" do |vb, override|
@@ -131,7 +131,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "RHGS1" do |mainbox|
     # This will be the private VM-only network where GlusterFS traffic will flow
-    mainbox.vm.network "private_network", ip: '192.168.15.200'
+    mainbox.vm.network "private_network", ip: '192.168.10.200'
     mainbox.vm.hostname = 'RHGS1'
     
     mainbox.vm.provider "virtualbox" do |vb, override|
