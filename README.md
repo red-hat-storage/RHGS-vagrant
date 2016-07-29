@@ -12,7 +12,7 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * Clone this repository
  * `git clone https://github.com/red-hat-storage/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
- * `cd RHGS3.1U2-RHEL7-vagrant`
+ * `cd RHGS-vagrant`
 * Run `vagrant up`
 * Decide how many RHGS nodes and how many bricks you need
 * Wait a while
