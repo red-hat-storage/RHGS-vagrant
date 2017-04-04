@@ -5,12 +5,20 @@
 VAGRANT_ROOT = File.dirname(File.expand_path(__FILE__))
 
 #Disable parallel runs - breaks peer probe in the end
-ENV['VAGRANT_NO_PARALLEL'] = 'no'
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
-VBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_vb_RHGS3.1U3.box"
-LVBOXURL = "http://file.rdu.redhat.com/~cblum/vagrant-storage/packer_lv_RHGS3.1U3.box"
-numberOfVMs = 0
-numberOfDisks = -1
+#################
+# Set RHGS version
+RHGS_VERSION = "RHGS3.2.0"
+
+# Currently available versions:
+# RHGS3.0.4
+# RHGS3.1.1
+# RHGS3.1.2
+# RHGS3.1.3
+# RHGS3.2.0
+# RHS2.1.0
+#################
 
 #################
 # General VM settings applied to all VMs
@@ -18,6 +26,10 @@ numberOfDisks = -1
 VMCPU = 3
 VMMEM = 1536
 #################
+
+
+numberOfVMs = 0
+numberOfDisks = -1
 
 if ARGV[0] == "up"
   environment = open('vagrant_env.conf', 'w')
@@ -91,7 +103,7 @@ end
 
 # Vagrant config section starts here
 Vagrant.configure(2) do |config|
- 
+  config.vm.box_url = "http://file.rdu.redhat.com/~cblum/vagrant-storage/#{RHGS_VERSION}.json"
   (2..numberOfVMs).each do |vmNum|
     config.vm.define "RHGS#{vmNum.to_s}" do |copycat|
       # This will be the private VM-only network where GlusterFS traffic will flow
@@ -99,7 +111,7 @@ Vagrant.configure(2) do |config|
       copycat.vm.hostname = "RHGS#{vmNum.to_s}"
 
       copycat.vm.provider "virtualbox" do |vb, override|
-        override.vm.box = VBOXURL
+        override.vm.box = RHGS_VERSION
 #        override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
         # Don't display the VirtualBox GUI when booting the machine
@@ -114,7 +126,7 @@ Vagrant.configure(2) do |config|
       end
 
       copycat.vm.provider "libvirt" do |lv, override|
-        override.vm.box = LVBOXURL
+        override.vm.box = RHGS_VERSION
         override.vm.synced_folder '.', '/vagrant', type: 'rsync'
       
         # Customize the amount of memory and vCPU in the VM:
@@ -135,7 +147,7 @@ Vagrant.configure(2) do |config|
     mainbox.vm.hostname = 'RHGS1'
     
     mainbox.vm.provider "virtualbox" do |vb, override|
-      override.vm.box = VBOXURL
+      override.vm.box = RHGS_VERSION
 #      override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
       # Don't display the VirtualBox GUI when booting the machine
@@ -150,7 +162,7 @@ Vagrant.configure(2) do |config|
     end
     
     mainbox.vm.provider "libvirt" do |lv, override|
-      override.vm.box = LVBOXURL
+      override.vm.box = RHGS_VERSION
       override.vm.synced_folder '.', '/vagrant', type: 'rsync'
     
       # Customize the amount of memory and vCPU in the VM:
