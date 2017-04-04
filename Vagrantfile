@@ -209,6 +209,7 @@ Vagrant.configure(2) do |config|
     sudo /bin/systemctl restart  glusterd.service
     sudo iptables -F
     echo '#{hostsFile}' | sudo tee -a /etc/hosts
+    yes | sudo /usr/lib/glusterfs/.unsupported/rhs-system-init.sh; true
   SHELL
 
   config.push.define "local-exec" do |push|
