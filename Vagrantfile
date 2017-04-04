@@ -32,8 +32,7 @@ numberOfVMs = 0
 numberOfDisks = -1
 
 if ARGV[0] == "up"
-  environment = open('vagrant_env.conf', 'w')
-  
+
   print "\n\e[1;37mHow many RHGS nodes do you want me to provision for you? Default: 2 \e[32m"
   while numberOfVMs < 2 or numberOfVMs > 99
     numberOfVMs = $stdin.gets.strip.to_i
@@ -57,18 +56,28 @@ if ARGV[0] == "up"
     end
   end
 
+  environment = open('vagrant_env.conf', 'w')
   environment.puts("# BEWARE: Do NOT modify ANY settings in here or your vagrant environment will be messed up")
   environment.puts(numberOfVMs.to_s)
   environment.puts(numberOfDisks.to_s)
+  environment.close
 
   print "\e[32m\nOK I will provision #{numberOfVMs} VMs for you and each one will have #{numberOfDisks} disks for bricks\e[37m\n\n"
   system "sleep 1"
 else # So that we destroy and can connect to all VMs...
-  environment = open('vagrant_env.conf', 'r')
+  begin
+    environment = open('vagrant_env.conf', 'r')
+    environment.readline # Skip the comment on top
+    numberOfVMs = environment.readline.to_i
+    numberOfDisks = environment.readline.to_i
+    environment.close
+  rescue # File was deleted or is unreadable and we just don't care...
+    numberOfVMs = 2
+    numberOfDisks = 2
+    print "\e[31m\nWARNING! Couldn't find file vagrant_env.conf! I will assume you have provisioned #{numberOfVMs} VMs\e[37m\n\n"
+  end
 
-  environment.readline # Skip the comment on top
-  numberOfVMs = environment.readline.to_i
-  numberOfDisks = environment.readline.to_i
+
 
   if ARGV[0] != "ssh-config"
     puts "Detected settings from previous vagrant up:"
@@ -77,7 +86,6 @@ else # So that we destroy and can connect to all VMs...
   end
 end
 
-environment.close
 
 hostsFile = "192.168.10.200 RHGS1\n"
 (2..numberOfVMs).each do |num|
@@ -198,7 +206,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo sed --in-place --expression="s/UUID=.*$/UUID=$(cat /proc/sys/kernel/random/uuid)/" /var/lib/glusterd/glusterd.info
-    sudo service glusterd restart
+    sudo /bin/systemctl restart  glusterd.service
     sudo iptables -F
     echo '#{hostsFile}' | sudo tee -a /etc/hosts
   SHELL
