@@ -209,6 +209,8 @@ Vagrant.configure(2) do |config|
     sudo /bin/systemctl restart  glusterd.service
     sudo iptables -F
     echo '#{hostsFile}' | sudo tee -a /etc/hosts
+    # Fix localhost for https://github.com/red-hat-storage/RHGS-vagrant/issues/2
+    sed -i 's/127\.0\.0\.1.*/127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4/g' /etc/hosts
     yes | sudo /usr/lib/glusterfs/.unsupported/rhs-system-init.sh; true
   SHELL
 
