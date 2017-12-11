@@ -1,0 +1,7 @@
+---
+  - hosts: default
+
+    tasks:
+
+    - ping:
+...

@@ -1,4 +1,5 @@
 packer_cache
+*.retry
 .vagrant
 disks
 ssh_conf
