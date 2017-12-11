@@ -10,7 +10,7 @@ The images for the Vagrant setup are created via [packer](https://www.packer.io)
 * RHEL 7.4 ISO
 
 ## Get started
-* Create an empty (!) directory for the resulting OVA (e.g. /tmp/rhgs-rhel-7-virtualbox)
+* Determine a non-existing (!) output directory for the resulting OVA (e.g. /tmp/rhgs-rhel-7-virtualbox)
 * Download RHEL 7.4
   * put it somewhere (e.g. /tmp/rhel-server-7.4-x86_64-dvd.iso)
 * Clone this repository
