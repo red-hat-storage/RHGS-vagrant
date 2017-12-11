@@ -8,7 +8,7 @@ This directory holds packer configuration files for the following combinations o
 
 |Storage Software|Operating System|VM Platform|Packer file|
 |---|---|---|---|
-|Red Hat Gluster Storage 3.3.1|Red Hat Enterprise Linux 7|VirtualBox|packer-virtualbox-rhgs-3.3.1-rhel-7.json|
+|Red Hat Gluster Storage 3.3.0|Red Hat Enterprise Linux 7|VirtualBox|packer-virtualbox-rhgs-3.3.0-rhel-7.json|
 
 
 ## Requirements
@@ -31,7 +31,7 @@ This directory holds packer configuration files for the following combinations o
 * Tell packer where to store the resulting OVA
   * `export OUTPUT_DIRECTORY=/tmp/rhgs-rhel-7-virtualbox`
 * run packer, e.g.
-  * `packer build packer-virtualbox-rhgs-3.3.1-rhel-7`
+  * `packer build packer-virtualbox-rhgs-3.3.0-rhel-7`
 
 ## Author
 [Daniel Messer](mailto:dmesser@redhat.com)
