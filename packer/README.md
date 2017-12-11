@@ -7,9 +7,9 @@ The images for the Vagrant setup are created via [packer](https://www.packer.io)
 This directory holds packer configuration files for the following combinations of storage software, operating systems and virtual machine platforms:
 
 |Storage Software|Operating System|VM Platform|Packer file|
-|---|---|---|
+|---|---|---|---|
 |Red Hat Gluster Storage 3.3.1|Red Hat Enterprise Linux 7|VirtualBox|packer-virtualbox-rhgs-3.3.1-rhel-7.json|
-|   |   |   | |
+
 
 ## Requirements
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
