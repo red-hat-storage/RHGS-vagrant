@@ -1,0 +1,10 @@
+---
+
+- include_vars: virtualbox-rhel-7.yml
+  when:
+    - os_version is defined
+    - os_version == "rhel-7"
+    - platform is defined
+    - platform == "virtualbox"
+
+...

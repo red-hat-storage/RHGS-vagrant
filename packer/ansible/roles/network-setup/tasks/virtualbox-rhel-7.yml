@@ -1,0 +1,6 @@
+---
+
+first_nic: enp0s3
+second_nic: enp0s4
+
+...

@@ -1,0 +1,20 @@
+---
+
+- include_vars:
+   file: rhgs-3.3.0-rhel-7.yml
+  when:
+    - os_version is defined
+    - os_version == "rhel-7"
+    - rhgs_version is defined
+    - rhgs_version == "3.3.0"
+
+- name: register to repositories
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.name }}"
+    baseurl: "{{ item.url }}"
+    enabled: yes
+    gpgcheck: no
+  with_items: "{{ yum_repositories }}"
+
+...

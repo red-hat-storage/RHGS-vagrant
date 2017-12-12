@@ -1,0 +1,39 @@
+---
+
+- name: install firewalld
+  yum: name=firewalld state=present
+
+- name: enable and start firewalld
+  service: name=firewalld state=started enabled=yes
+
+- name: open required ports
+  firewalld:
+    port: "{{ item }}"
+    zone: public
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 22/tcp
+    - 80/tcp
+    - 111/tcp
+    - 139/tcp
+    - 443/tcp
+    - 445/tcp
+    - 965/tcp
+    - 2049/tcp
+    - 5666-5667/tcp
+    - 6010-6012/tcp
+    - 8080/tcp
+    - 24007/tcp
+    - 24009-24108/tcp
+    - 38465-38466/tcp
+    - 38468-38469/tcp
+    - 39543/tcp
+    - 49152-49251/tcp
+    - 54321/tcp
+    - 55863/tcp
+    - 111/udp
+    - 963/udp
+
+...

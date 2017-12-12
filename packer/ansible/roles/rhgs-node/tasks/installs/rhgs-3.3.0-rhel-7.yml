@@ -1,0 +1,14 @@
+---
+- name: install rhgs packages including samba, AD and ganesha
+  yum: name={{ item }} state=present
+  with_items:
+    - redhat-storage-server-3.3.1.0-1.el7rhgs
+    - "@RH-Gluster-Samba-Server"
+    - "@RH-Gluster-AD-Integration"
+    - gdeploy
+    - glusterfs-ganesha
+
+- name: exclude gluster packages from rhel-7-server-rpms repos
+  shell: yum-config-manager  --save --setopt=rhel-7-server-rpms.exclude=gluster*;
+
+...

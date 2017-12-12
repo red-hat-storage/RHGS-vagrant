@@ -1,0 +1,11 @@
+---
+
+- name: update all packages
+  package:
+    name: "*"
+    state: latest
+  when:
+    - update_packages is defined
+    - update_packages
+
+...

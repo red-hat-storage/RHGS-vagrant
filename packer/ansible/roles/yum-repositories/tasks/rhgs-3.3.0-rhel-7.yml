@@ -1,0 +1,10 @@
+---
+
+yum_repositories:
+  - { name: "rh-gluster-3-for-rhel-7-server-rpms", url: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/rhgs-server/3.1/os" }
+  - { name: "rh-gluster-3-samba-for-rhel-7-server-rpms", url: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/rh-gluster-samba/3.1/os/" }
+  - { name: "rh-gluster-3-nfs-for-rhel-7-server-rpms", url: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/rhgs-server-nfs/3.1/os/" }
+  - { name: "rhel-7-server-rpms", url: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/os/" }
+  - { name: "rhel-ha-for-rhel-7-server-rpms", url: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/highavailability/os/" }
+
+...

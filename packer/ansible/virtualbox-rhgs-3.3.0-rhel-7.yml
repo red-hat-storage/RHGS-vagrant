@@ -1,0 +1,17 @@
+---
+- hosts: default
+
+  vars:
+    platform: virtualbox
+    os_version: rhel-7
+    rhgs_version: 3.3.0
+    update_packages: true
+
+  roles:
+    - yum-repositories
+    - system-update
+    - network-setup
+    - authorized-key
+    - rhgs-node
+
+...
