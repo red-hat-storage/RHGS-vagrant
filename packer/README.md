@@ -17,6 +17,7 @@ This directory holds packer configuration files for the following combinations o
 * [Ansible](https://ansible.com) (starting 2.4.2.0)
 * git
 * RHEL 7.4 ISO
+* **Red Hat VPN access**
 
 ## Get started
 * Determine a non-existing (!) output directory for the resulting OVA (e.g. /tmp/rhgs-rhel-7-virtualbox)
@@ -31,7 +32,7 @@ This directory holds packer configuration files for the following combinations o
 * Tell packer where to store the resulting OVA
   * `export OUTPUT_DIRECTORY=/tmp/rhgs-rhel-7-virtualbox`
 * run packer, e.g.
-  * `packer build packer-virtualbox-rhgs-3.3.1-rhel-7`
+  * `packer build packer-virtualbox-rhgs-3.3.0-rhel-7.json`
 
 ## Author
 [Daniel Messer](mailto:dmesser@redhat.com)
