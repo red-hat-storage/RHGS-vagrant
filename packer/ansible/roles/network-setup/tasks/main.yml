@@ -1,6 +1,6 @@
 ---
 
-- include_tasks: virtualbox-rhel-7.yml
+- include_tasks: scenarios/virtualbox-rhel-7.yml
   when:
     - os_version is defined
     - os_version == "rhel-7"
