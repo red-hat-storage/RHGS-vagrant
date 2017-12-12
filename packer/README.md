@@ -31,6 +31,7 @@ This directory holds packer configuration files for the following combinations o
   * `export ISO_FILE_PATH=file:///tmp/rhel-server-7.4-x86_64-dvd.iso`
 * Tell packer where to store the resulting OVA
   * `export OUTPUT_DIRECTORY=/tmp/rhgs-rhel-7-virtualbox`
+* make sure you are logged on to the RHT VPN
 * run packer, e.g.
   * `packer build packer-virtualbox-rhgs-3.3.1-rhel-7.json`
 
