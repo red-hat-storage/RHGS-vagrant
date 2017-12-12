@@ -32,7 +32,7 @@ This directory holds packer configuration files for the following combinations o
 * Tell packer where to store the resulting OVA
   * `export OUTPUT_DIRECTORY=/tmp/rhgs-rhel-7-virtualbox`
 * run packer, e.g.
-  * `packer build packer-virtualbox-rhgs-3.3.0-rhel-7.json`
+  * `packer build packer-virtualbox-rhgs-3.3.1-rhel-7.json`
 
 ## Author
 [Daniel Messer](mailto:dmesser@redhat.com)
