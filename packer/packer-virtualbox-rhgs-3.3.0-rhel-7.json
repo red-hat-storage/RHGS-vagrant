@@ -45,6 +45,12 @@
         [
           "modifyvm",
           "{{.Name}}",
+          "--vram",
+          "32"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
           "--nic1",
           "nat",
           "--nictype1",
