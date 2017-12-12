@@ -28,7 +28,7 @@
       "hard_drive_interface": "sata",
       "format": "ova",
       "output_directory": "{{ user `output_directory` }}",
-      "vm_name": "packer-rhgs-3.3.0-rhel-7",
+      "vm_name": "packer-rhgs-3.3.1-rhel-7",
       "vboxmanage": [
         [
           "modifyvm",
@@ -80,7 +80,7 @@
     {
     "type": "ansible",
     "user": "vagrant",
-    "playbook_file": "ansible/virtualbox-rhgs-3.3.0-rhel-7.yml",
+    "playbook_file": "ansible/virtualbox-rhgs-3.3.1-rhel-7.yml",
     "extra_arguments": [
         "--become"
       ]
