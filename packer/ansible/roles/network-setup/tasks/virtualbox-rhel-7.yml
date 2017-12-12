@@ -1,6 +1,14 @@
 ---
 
-first_nic: enp0s3
-second_nic: enp0s4
+- name: configure second nic on rhel 7 for virtualbox
+  shell: nmcli connection add con-name eth1 ifname eth1 type ethernet connection.autoconnect yes ipv4.method auto ipv4.never-default yes ipv4.ignore-auto-dns yes ipv4.ignore-auto-routes yes  802-3-ethernet.mac-address ''
+
+- name: remove mac address from first nic profile on rhel 7 for virtualbox
+  shell: nmcli connection modify eth0 802-3-ethernet.mac-address '' connection.interface-name eth0
+
+- name: disable bonding
+  lineinfile: dest=/etc/modprobe.d/blacklist-bonding.conf create=yes line='blacklist bonding'
+
+
 
 ...

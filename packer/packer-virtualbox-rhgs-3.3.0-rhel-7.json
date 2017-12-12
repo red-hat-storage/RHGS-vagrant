@@ -28,19 +28,50 @@
       "hard_drive_interface": "sata",
       "format": "ova",
       "output_directory": "{{ user `output_directory` }}",
-      "vm_name": "packer-rhel-7",
+      "vm_name": "packer-rhgs-3.3.0-rhel-7",
       "vboxmanage": [
         [
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "1024"
+          "2048"
         ],
         [
           "modifyvm",
           "{{.Name}}",
           "--cpus",
           "2"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--nic1",
+          "nat",
+          "--nictype1",
+          "virtio"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--nic2",
+          "hostonly",
+          "--nictype2",
+          "virtio",
+          "--hostonlyadapter2",
+          "vboxnet0"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--audio",
+          "none"
+        ],
+        [
+          "storagectl",
+          "{{.Name}}",
+          "--name",
+          "IDE Controller",
+          "--remove"
         ]
       ]
     }
