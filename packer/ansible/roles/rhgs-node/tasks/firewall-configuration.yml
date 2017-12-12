@@ -6,10 +6,21 @@
 - name: enable and start firewalld
   service: name=firewalld state=started enabled=yes
 
-- name: open required ports
+- name: open required ports on gluster network
   firewalld:
     port: "{{ item }}"
     zone: public
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 22/tcp
+    - 9090/tcp
+
+- name: open required ports on gluster network
+  firewalld:
+    port: "{{ item }}"
+    zone: internal
     state: enabled
     permanent: yes
     immediate: yes
