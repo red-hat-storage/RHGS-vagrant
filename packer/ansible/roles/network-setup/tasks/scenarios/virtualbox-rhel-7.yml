@@ -21,12 +21,14 @@
 - name: disable bonding
   lineinfile: dest=/etc/modprobe.d/blacklist-bonding.conf create=yes line='blacklist bonding'
 
-- name: remove legacy ifcfg files
+- name: remove unneeded ifcfg files
   file:
     path: "{{ item }}"
     state: absent
-  with_fileglob:
-    - "/etc/sysconfig/network-scripts/ifcfg-eth*"
+  with_items:
+    - /etc/sysconfig/network-scripts/ifcfg-eth0.bak"
+    - /etc/sysconfig/network-scripts/ifcfg-eth1"
+    - /etc/sysconfig/network-scripts/ifcfg-eth1-1.bak"
 
 
 ...
