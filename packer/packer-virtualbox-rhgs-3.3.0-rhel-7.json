@@ -22,7 +22,7 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "900s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
-      "guest_additions_path": "vbox_guest_additions_{{.Version}}.iso",
+      "guest_additions_path": "vbox_guest_additions.iso",
       "virtualbox_version_file": ".vbox_version",
       "iso_interface": "sata",
       "hard_drive_interface": "sata",
