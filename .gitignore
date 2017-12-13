@@ -1,4 +1,4 @@
-packer/ansible/fetch
+packer/inventory
 packer_cache
 *.retry
 .vagrant
