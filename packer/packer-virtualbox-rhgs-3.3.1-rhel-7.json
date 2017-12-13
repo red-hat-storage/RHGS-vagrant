@@ -22,6 +22,7 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "900s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+      "post_shutdown_delay": "2m",
       "guest_additions_path": "vbox_guest_additions.iso",
       "virtualbox_version_file": ".vbox_version",
       "iso_interface": "sata",
@@ -95,7 +96,8 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "compression_level": 9
+      "compression_level": 9,
+      "output": "{{ user `output_directory` }}/virtualbox-rhgs-3.3.1-rhel-7.box"
     }
 ]
 }
