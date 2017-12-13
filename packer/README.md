@@ -16,7 +16,7 @@ This directory holds packer configuration files for the following combinations o
 * [Packer](https://www.packer.io) (starting 1.1.3)
 * [Ansible](https://ansible.com) (starting 2.4.2.0)
 * git
-* RHEL 7.4 ISO
+* an ISO for one of the supported OS, e.g. RHEL 7.4 ISO
 * **Red Hat VPN access**
 
 ## Get started
@@ -27,6 +27,8 @@ This directory holds packer configuration files for the following combinations o
   * `git clone -b packer https://github.com/dmesser/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant/packer`
+* If yo have already cloned this repo earlier, make sure you are up to update
+  * `git pull`
 * Tell packer where to find your ISO, e.g.
   * `export ISO_FILE_PATH=file:///tmp/rhel-server-7.4-x86_64-dvd.iso`
 * Tell packer where to store the resulting OVA
