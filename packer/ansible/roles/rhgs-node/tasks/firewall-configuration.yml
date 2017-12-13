@@ -6,7 +6,7 @@
 - name: enable and start firewalld
   service: name=firewalld state=started enabled=yes
 
-- name: open required ports on gluster network
+- name: open required ports on public network
   firewalld:
     port: "{{ item }}"
     zone: public
