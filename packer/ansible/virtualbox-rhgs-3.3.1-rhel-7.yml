@@ -11,6 +11,7 @@
     - yum-repositories
     - system-update
     - network-setup
+    - vbox-guest-additions
     - authorized-key
     - rhgs-node
 
