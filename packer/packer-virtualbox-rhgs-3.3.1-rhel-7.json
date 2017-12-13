@@ -22,7 +22,7 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "900s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
-      "post_shutdown_delay": "2m",
+      "post_shutdown_delay": "1m",
       "guest_additions_path": "vbox_guest_additions.iso",
       "virtualbox_version_file": ".vbox_version",
       "iso_interface": "sata",
@@ -55,16 +55,6 @@
           "nat",
           "--nictype1",
           "virtio"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--nic2",
-          "hostonly",
-          "--nictype2",
-          "virtio",
-          "--hostonlyadapter2",
-          "vboxnet0"
         ],
         [
           "modifyvm",
