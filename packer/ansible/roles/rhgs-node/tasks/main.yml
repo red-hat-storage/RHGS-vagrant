@@ -4,5 +4,6 @@
 
 - import_tasks: package-installation.yml
 
+- import_tasks: service-config.yml
 
 ...

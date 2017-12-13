@@ -1,0 +1,6 @@
+---
+
+- name: start and enable glusterd
+  service: name=glusterd state=started enabled=yes
+
+...
