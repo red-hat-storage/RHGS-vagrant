@@ -28,7 +28,6 @@
       "iso_interface": "sata",
       "hard_drive_interface": "sata",
       "format": "ova",
-      "output_directory": "{{ user `output_directory` }}",
       "vm_name": "packer-rhgs-3.3.1-rhel-7",
       "vboxmanage": [
         [
