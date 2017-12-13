@@ -20,6 +20,8 @@
       sleep: 5
       connect_timeout: 300
   when:
+    - update_packages is defined
+    - update_packages
     - system_reboot is defined
     - system_reboot
 
