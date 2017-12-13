@@ -20,7 +20,7 @@ This directory holds packer configuration files for the following combinations o
 * **Red Hat VPN access**
 
 ## Get started
-* Determine a non-existing (!) output directory for the resulting OVA (e.g. /tmp/rhgs-rhel-7-virtualbox)
+* Create an output directory for the resulting .box file (e.g. /tmp/rhgs-rhel-7-virtualbox)
 * Download RHEL 7.4 Binary DVD ISO
   * put it somewhere (e.g. /tmp/rhel-server-7.4-x86_64-dvd.iso)
 * Clone this repository
