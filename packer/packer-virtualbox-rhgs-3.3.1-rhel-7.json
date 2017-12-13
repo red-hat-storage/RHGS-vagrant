@@ -88,5 +88,5 @@
       "compression_level": 9,
       "output": "{{ user `output_directory` }}/virtualbox-rhgs-3.3.1-rhel-7.box"
     }
-]
+  ]
 }
