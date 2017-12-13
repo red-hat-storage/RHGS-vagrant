@@ -1,10 +1,7 @@
 ---
 
-- name: configure second nic on rhel 7 for virtualbox
-  shell: nmcli connection add con-name eth1 ifname eth1 type ethernet connection.autoconnect yes ipv4.method auto ipv4.never-default yes ipv4.ignore-auto-dns yes ipv4.ignore-auto-routes yes  802-3-ethernet.mac-address ''
-
-- name: remove mac address from first nic profile on rhel 7 for virtualbox
-  shell: nmcli connection modify eth0 802-3-ethernet.mac-address '' connection.interface-name eth0
+- name: configure profile of first nic on rhel 7 for virtualbox
+  shell: nmcli connection modify eth0 802-3-ethernet.mac-address '' connection.interface-name eth0 connection.zone public connection.autoconnect yes
 
 - name: add first nic to public zone on rhel 7 for virtualbox
   lineinfile:
@@ -12,23 +9,16 @@
     regexp: "^ZONE="
     line: "ZONE=public"
 
+- name: configure profile of second nic on rhel 7 for virtualbox
+  shell: nmcli connection add con-name eth1 ifname eth1 type ethernet 802-3-ethernet.mac-address '' connection.zone internal connection.autoconnect yes ipv4.method auto ipv4.never-default yes ipv4.ignore-auto-dns yes
+
 - name: add second nic to internal zone on rhel 7 for virtualbox
   lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/ifcfg-eth1
     regexp: "^ZONE="
     line: "ZONE=internal"
 
 - name: disable bonding
   lineinfile: dest=/etc/modprobe.d/blacklist-bonding.conf create=yes line='blacklist bonding'
-
-- name: remove unneeded ifcfg files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/sysconfig/network-scripts/ifcfg-eth0.bak"
-    - /etc/sysconfig/network-scripts/ifcfg-eth1"
-    - /etc/sysconfig/network-scripts/ifcfg-eth1-1.bak"
-
 
 ...
