@@ -8,13 +8,13 @@
 
 - name: add first nic to public zone on rhel 7 for virtualbox
   lineinfile:
-    path: /etc/sysconfig/network-script/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
     regexp: "^ZONE="
     line: "ZONE=public"
 
 - name: add second nic to internal zone on rhel 7 for virtualbox
   lineinfile:
-    path: /etc/sysconfig/network-script/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
     regexp: "^ZONE="
     line: "ZONE=internal"
 
