@@ -1,38 +1,20 @@
 ---
 
-- name: create ssh directory
-  file:
-    path: /home/vagrant/.ssh
-    state: directory
-    mode: 0700
+- name: Manage vagrant ssh keys and set password to 'vagrant'
+  user:
+    name: vagrant
+    generate_ssh_key: yes
+  register: vagrant_id_rsa
 
-- name: create ssh key pair for internal use
-  shell:
-    cmd: ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
-    creates: /home/vagrant/.ssh/id_rsa
-
-- name: change permissions on key pair
-  file: path=/home/vagrant/.ssh/{{ item }} owner=vagrant group=vagrant mode=0400
-  with_items:
-    - id_rsa
-    - id_rsa.pub
-
-- name: fetch ssh pub key
-  fetch:
-    src: /home/vagrant/.ssh/id_rsa.pub
-    dest: fetch/
-    flat: yes
-
-- name: fetch ssh private key
-  fetch:
-    src: /home/vagrant/.ssh/id_rsa
-    dest: fetch/
-    flat: yes
-
-- name: add ssh key pair to authorized_keys
+- name: Install vagrant public key as authorized_key for vagrant user
   authorized_key:
     user: vagrant
-    key: "{{ lookup('file', 'fetch/id_rsa.pub') }}"
-    state: present
+    key: "{{ vagrant_id_rsa.ssh_public_key }}"
+
+- name: Install vagrant insecure authorized-key
+  authorized_key:
+    user: vagrant
+    key: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
 
 ...
