@@ -1,0 +1,7 @@
+---
+
+- name: install centos storage sig repositories
+  yum:
+    name: centos-release-gluster38
+
+...

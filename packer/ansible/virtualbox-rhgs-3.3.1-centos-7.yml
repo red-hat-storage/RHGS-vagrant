@@ -3,8 +3,8 @@
 
   vars:
     platform: virtualbox
-    os_version: rhel-7
-    rhgs_version: 3.2.0
+    os_version: centos-7
+    rhgs_version: 3.3.1
     update_packages: true
 
   roles:

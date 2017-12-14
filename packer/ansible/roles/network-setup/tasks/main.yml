@@ -7,4 +7,12 @@
     - platform is defined
     - platform == "virtualbox"
 
+- include_tasks: scenarios/virtualbox-centos-7.yml
+  when:
+    - os_version is defined
+    - os_version == "centos-7"
+    - platform is defined
+    - platform == "virtualbox"
+
+
 ...

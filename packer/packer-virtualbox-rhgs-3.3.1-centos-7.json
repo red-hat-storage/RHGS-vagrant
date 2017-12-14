@@ -7,7 +7,7 @@
     {
       "type": "virtualbox-iso",
       "boot_command": [
-        "<up><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhgs-rhel-7-ks.cfg<enter><wait>"
+        "<up><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhgs-centos-7-ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
       "disk_size": 20480,
@@ -16,7 +16,7 @@
       "http_directory": "kickstart",
       "iso_url": "{{ user `iso_file_path` }}",
       "iso_checksum_type": "sha256",
-      "iso_checksum": "431a58c8c0351803a608ffa56948c5a7861876f78ccbe784724dd8c987ff7000",
+      "iso_checksum": "ec7500d4b006702af6af023b1f8f1b890b6c7ee54400bb98cef968b883cd6546",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -28,7 +28,7 @@
       "iso_interface": "sata",
       "hard_drive_interface": "sata",
       "format": "ova",
-      "vm_name": "packer-rhgs-3.2.0-rhel-7",
+      "vm_name": "packer-rhgs-3.3.1-centos-7",
       "vboxmanage": [
         [
           "modifyvm",
@@ -59,6 +59,18 @@
         [
           "modifyvm",
           "{{.Name}}",
+          "--natdnshostresolver1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natdnsproxy1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
           "--audio",
           "none"
         ],
@@ -76,7 +88,7 @@
     {
     "type": "ansible",
     "user": "vagrant",
-    "playbook_file": "ansible/virtualbox-rhgs-3.2.0-rhel-7.yml",
+    "playbook_file": "ansible/virtualbox-rhgs-3.3.1-centos-7.yml",
     "extra_arguments": [
         "--become"
       ]
@@ -86,7 +98,7 @@
     {
       "type": "vagrant",
       "compression_level": 9,
-      "output": "{{ user `output_directory` }}/virtualbox-rhgs-3.2.0-rhel-7.box"
+      "output": "{{ user `output_directory` }}/virtualbox-rhgs-3.3.1-centos-7.box"
     }
   ]
 }
