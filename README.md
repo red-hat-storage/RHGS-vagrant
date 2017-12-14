@@ -10,14 +10,15 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * git
 
 ## Get started
+* You **must** be in the Red Hat VPN
 * Clone this repository
- * `git clone https://github.com/dmesser/RHGS-vagrant.git`
+  * `git clone https://github.com/dmesser/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
- * `cd RHGS-vagrant`
+  * `cd RHGS-vagrant`
 * Run `vagrant up`
-* Decide how many RHGS nodes and how many bricks you need
-* Decide if you want vagrant to run gdeploy for you
-* Wait a while
+  * Decide how many RHGS nodes and how many bricks you need
+  * Decide if you want vagrant to initialize the cluster (`gdeploy`) for you
+  * Wait a while
 
 ## Usage
 * You can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
@@ -46,7 +47,7 @@ If you - for whatever reason - do not want to use my prebuild box, you can creat
 * Checkout the "packer" branch of this repository, follow the README
 
 ## Author
-[Daniel Messer](mailto:dmesser@redhat.com) - [dmesser@redhat.com](mailto:dmesser@redhat.com)
+[Daniel Messer](mailto:dmesser@redhat.com) - [dmesser@redhat.com](mailto:dmesser@redhat.com) -
 Technical Marketing Manager @ Red Hat
 
 ## Original Author
