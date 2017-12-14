@@ -3,10 +3,23 @@
 {{ hostvars[host]["ansible_hostname"] }}
 {% endfor %}
 
-{% set comma = joiner(",") %}
-[backend-setup]
-devices={% for device,options in ansible_devices.iteritems()|sort(attribute='0') %}{{ comma() + device if options.model == "VBOX HARDDISK" and options.partitions.items()|length == 0 else '' }}{% endfor %}
+{% set devices = [] %}
+{% for device,options in ansible_devices.iteritems()|sort(attribute='0') %}
+  {% if options.model == "VBOX HARDDISK" and options.partitions.items()|length == 0 %}
+    {% set __ = devices.append(device) %}
+  {% endif %}
+{% endfor %}
 
+[backend-setup]
+devices={{ devices|join(",") }}
+brick_dirs=brick{1..{{ devices|length }}}
+
+{% for i in devices %}
+[shell{{ loop.index }}]
+action=execute
+command=mkdir -p /gluster/brick{{ loop.index }}/brick{{ loop.index }}
+
+{% endfor %}
 
 [peer]
 action=probe
