@@ -1,19 +1,12 @@
 [hosts]
-{% for host in groups["all"] %}
+{% for host in groups["all"]|sort %}
 {{ hostvars[host]["ansible_hostname"] }}
 {% endfor %}
 
 {% set comma = joiner(",") %}
 [backend-setup]
-devices={% for device,options in ansible_devices.iteritems() %}{{ comma() + device if options.model == "VBOX HARDDISK" and options.partitions.items()|length == 0 else '' }}{% endfor %}
+devices={% for device,options in ansible_devices.iteritems()|sort(attribute='0') %}{{ comma() + device if options.model == "VBOX HARDDISK" and options.partitions.items()|length == 0 else '' }}{% endfor %}
 
 
 [peer]
 action=probe
-
-[volume]
-action=create
-volname=example_volume
-transport=tcp
-replica=yes
-replica_count={{ '3 if groups[all]|length > 2 else '2'}
