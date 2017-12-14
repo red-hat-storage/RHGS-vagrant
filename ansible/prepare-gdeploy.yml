@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+
+  tasks:
+
+    - name: generate gdeploy.conf for virtualbox
+      template:
+        src: gdeploy-virtualbox.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+      when: provider == "virtualbox"
+
+...

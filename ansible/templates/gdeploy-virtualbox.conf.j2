@@ -1,0 +1,12 @@
+[hosts]
+{% for host in groups["all"] %}
+{{ hostvars[host]["ansible_hostname"] }}
+{% endfor %}
+
+{% set comma = joiner(",") %}
+[backend-setup]
+devices={% for device,options in ansible_devices.iteritems() %}{{ comma() + device if options.model == "VBOX HARDDISK" and options.partitions.items()|length == 0 else '' }}{% endfor %}
+
+
+[peer]
+manage=probe
