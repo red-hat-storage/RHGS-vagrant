@@ -126,7 +126,6 @@ Vagrant.configure(2) do |config|
 
       machine.vm.provider "virtualbox" do |vb, override|
         override.vm.box = RHGS_VERSION
-#        override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
         # Make this a linked clone
         vb.linked_clone = true
