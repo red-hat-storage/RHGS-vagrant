@@ -12,9 +12,9 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 ## Get started
 * You **must** be in the Red Hat VPN
 * Clone this repository
- * `git clone https://github.com/dmesser/RHGS-vagrant.git`
+  * `git clone https://github.com/dmesser/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
- * `cd RHGS-vagrant`
+  * `cd RHGS-vagrant`
 * Run `vagrant up`
 * Decide how many RHGS nodes and how many bricks you need
 * Decide if you want vagrant to run gdeploy for you
