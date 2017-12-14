@@ -16,9 +16,9 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant`
 * Run `vagrant up`
-* Decide how many RHGS nodes and how many bricks you need
-* Decide if you want vagrant to run gdeploy for you
-* Wait a while
+  * Decide how many RHGS nodes and how many bricks you need
+  * Decide if you want vagrant to run gdeploy for you
+  * Wait a while
 
 ## Usage
 * You can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
