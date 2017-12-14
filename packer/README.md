@@ -9,6 +9,7 @@ This directory holds packer configuration files for the following combinations o
 |Storage Software|Operating System|VM Platform|Packer file|
 |---|---|---|---|
 |Red Hat Gluster Storage 3.3.1|Red Hat Enterprise Linux 7|VirtualBox|packer-virtualbox-rhgs-3.3.1-rhel-7.json|
+|GlusterFS 3.9|CentOS 7|VirtualBox|packer-virtualbox-rhgs-3.3.1-centos-7.json|
 
 
 ## Requirements
