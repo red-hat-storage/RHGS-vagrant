@@ -1,6 +1,6 @@
-# RHGS 3.1.3 in Vagrant
+# RHGS 3.3.1 in Vagrant
 
-A Vagrant setup for Red Hat Gluster Storage version 3.1 update 3.
+A Vagrant setup for Red Hat Gluster Storage version 3.3 update 1.
 This will setup as many RHGS nodes as you want with a number of bricks that you can define!  
 
 ## Requirements
