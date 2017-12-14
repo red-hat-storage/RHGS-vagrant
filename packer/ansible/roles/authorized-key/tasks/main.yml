@@ -11,6 +11,11 @@
     user: vagrant
     key: "{{ vagrant_id_rsa.ssh_public_key }}"
 
+- name: Install vagrant public key as authorized_key for root user
+  authorized_key:
+    user: root
+    key: "{{ vagrant_id_rsa.ssh_public_key }}"
+
 - name: Install vagrant insecure authorized-key
   authorized_key:
     user: vagrant
