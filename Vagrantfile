@@ -25,22 +25,21 @@ VMMEM = 1024
 
 numberOfVMs = 0
 numberOfDisks = -1
+clusterInit = -1
 
 if ARGV[0] == "up"
 
-  print "\n\e[1;37mHow many RHGS nodes do you want me to provision for you? Default: 2 \e[32m"
-  while numberOfVMs < 2 or numberOfVMs > 99
+  print "\n\e[1;37mHow many RHGS nodes do you want me to provision for you? [2] \e[32m"
+  while numberOfVMs < 2
     numberOfVMs = $stdin.gets.strip.to_i
     if numberOfVMs == 0 # The user pressed enter without input or we cannot parse the input to a number
       numberOfVMs = 2
     elsif numberOfVMs < 2
       print "\e[31mWe need at least 2 VMs ;) Try again \e[32m"
-    elsif numberOfVMs > 99
-      print "\e[31mWe don't support more than 99 VMs - Try again \e[32m"
     end
   end
 
-  print "\e[1;37mHow many disks do you need per VM for bricks? Default: 2 \e[32m"
+  print "\e[1;37mHow many disks do you need per VM for bricks? [2] \e[32m"
 
   while numberOfDisks < 1
     numberOfDisks = $stdin.gets.strip.to_i
@@ -51,13 +50,35 @@ if ARGV[0] == "up"
     end
   end
 
+  print "\e[1;37mDo you want me to initialize the cluster for you? [no] \e[32m"
+
+  while clusterInit == -1
+    response = $stdin.gets.strip.to_s
+
+    if response == 'yes' or response == 'y'
+      clusterInit = 1
+    elsif response == 'no' or response == 'n' or response == ''
+      clusterInit = 0
+    else
+      print "\e[31mPlease enter 'yes' or 'no'\e[32m"
+    end
+  end
+
+
   environment = open('vagrant_env.conf', 'w')
   environment.puts("# BEWARE: Do NOT modify ANY settings in here or your vagrant environment will be messed up")
   environment.puts(numberOfVMs.to_s)
   environment.puts(numberOfDisks.to_s)
   environment.close
 
-  print "\e[32m\nOK I will provision #{numberOfVMs} VMs for you and each one will have #{numberOfDisks} disks for bricks\e[37m\n\n"
+  print "\e[32m\nOK I will provision #{numberOfVMs} VMs for you and each one will have #{numberOfDisks} disks for bricks\e[37m\n"
+
+  if clusterInit == 1
+    print "\e[32m\nAlso, I will initialize the cluster for you\e[37m\n\n"
+  else
+    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf for your convenience\e[37m\n\n"
+  end
+
   system "sleep 1"
 else # So that we destroy and can connect to all VMs...
   begin
@@ -95,9 +116,6 @@ end
 Vagrant.configure(2) do |config|
   config.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
 
-  config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
-
   (1..numberOfVMs).each do |vmNum|
     config.vm.define "RHGS#{vmNum.to_s}" do |machine|
       # This will be the private VM-only network where GlusterFS traffic will flow
@@ -106,7 +124,6 @@ Vagrant.configure(2) do |config|
 
       machine.vm.provider "virtualbox" do |vb, override|
         override.vm.box = RHGS_VERSION
-#        override.vm.synced_folder '.', '/vagrant', type: 'rsync'
 
         # Make this a linked clone
         vb.linked_clone = true
@@ -120,6 +137,10 @@ Vagrant.configure(2) do |config|
         vb.cpus = VMCPU
 
         vBoxAttachDisks( numberOfDisks, vb, "RHGS#{vmNum.to_s}" )
+
+        # Accelerate SSH / Ansible connections (https://github.com/mitchellh/vagrant/issues/1807)
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       end
 
       if vmNum == numberOfVMs
@@ -136,6 +157,10 @@ Vagrant.configure(2) do |config|
           end
 
           ansible.playbook = "ansible/prepare-gdeploy.yml"
+        end
+
+        if clusterInit == 1
+          machine.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
         end
       end
     end
