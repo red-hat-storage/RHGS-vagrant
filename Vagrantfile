@@ -13,6 +13,7 @@ RHGS_VERSION = "rhgs-3.3.1-rhel-7"
 
 # Currently available versions:
 # rhgs-3.3.1-rhel-7
+# rhgs-3.3.1-centos-7
 #################
 
 #################
