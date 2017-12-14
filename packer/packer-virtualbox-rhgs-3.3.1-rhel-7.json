@@ -59,6 +59,18 @@
         [
           "modifyvm",
           "{{.Name}}",
+          "--natdnshostresolver1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natdnsproxy1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
           "--audio",
           "none"
         ],
