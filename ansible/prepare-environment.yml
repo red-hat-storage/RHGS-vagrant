@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+
+  become: true
+
+  tasks:
+
+    - name: generate /etc/hosts file for local name resolution
+      template:
+        src: hosts.j2
+        dest: /etc/hosts
+...
