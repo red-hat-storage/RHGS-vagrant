@@ -23,7 +23,6 @@ VMCPU = 1
 VMMEM = 1024
 #################
 
-
 numberOfVMs = 0
 numberOfDisks = -1
 clusterInit = -1
@@ -113,29 +112,46 @@ def vBoxAttachDisks(numDisk, provider, boxName)
   end
 end
 
+def libvirtAttachDisks(numDisk, provider)
+  for i in 1..numDisk.to_i
+    provider.storage :file, :bus => 'virtio', :size => '100G'
+  end
+end
+
 # Vagrant config section starts here
 Vagrant.configure(2) do |config|
-  config.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
+
+  config.vm.provider "virtualbox" do |vb, override|
+    override.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
+  end
+
+  config.vm.provider "libvirt" do |libvirt, override|
+    override.vm.box_url = "file:///tmp/rhgs-rhel-7-virtualbox/libvirt-#{RHGS_VERSION}.box"
+    libvirt.storage_pool_name = ENV['LIBVIRT_STORAGE_POOL'] || 'default'
+  end
 
   (1..numberOfVMs).each do |vmNum|
     config.vm.define "RHGS#{vmNum.to_s}" do |machine|
-      # This will be the private VM-only network where GlusterFS traffic will flow
-      machine.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
+
+      # Provider-indepent options
       machine.vm.hostname = "RHGS#{vmNum.to_s}"
 
       machine.vm.provider "virtualbox" do |vb, override|
+
+        # This will be the private VM-only network where GlusterFS traffic will flow
+        override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
         override.vm.box = RHGS_VERSION
 
         # Make this a linked clone
         vb.linked_clone = true
 
+	# Set VM resources
+	vb.memory = VMMEM
+	vb.cpus = VMCPU
+
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
         vb.name = "RHGS#{vmNum.to_s}-RHEL7"
-
-        # Customize the amount of memory and vCPU in the VM:
-        vb.memory = VMMEM
-        vb.cpus = VMCPU
 
         vBoxAttachDisks( numberOfDisks, vb, "RHGS#{vmNum.to_s}" )
 
@@ -144,20 +160,42 @@ Vagrant.configure(2) do |config|
         vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       end
 
+      machine.vm.provider "libvirt" do |libvirt, override|
+	override.vm.box = RHGS_VERSION
+        override.vm.network "private_network", type: "dhcp", auto_config: false, libvirt__domain_name: "RHGS#{vmNum.to_s}-RHEL7"
+	override.vm.synced_folder ".", "/vagrant", disabled: true
+
+	libvirt.memory = VMMEM
+	libvirt.cpus = VMCPU
+	libvirt.nic_model_type = "virtio"
+        libvirt.disk_bus = "virtio"
+	libvirt.username = "root"
+#        libvirt.graphics_type = "spice"
+#        libvirt.video_type = "qxl"
+
+	libvirtAttachDisks( numberOfDisks, libvirt )
+      end
+
       if vmNum == numberOfVMs
-        machine.vm.provision :ansible do |ansible|
+	machine.vm.provision :ansible do |ansible|
           ansible.limit = "all"
           ansible.playbook = "ansible/prepare-environment.yml"
         end
 
-        machine.vm.provision :ansible do |ansible|
-          ansible.limit = "all"
-
-          config.vm.provider "virtualbox" do |vb|
+	machine.vm.provider "virtualbox" do |virtualbox,override|
+	  override.vm.provision :ansible do |ansible|
+	    ansible.limit = "all"
             ansible.extra_vars = { provider: "virtualbox" }
+            ansible.playbook = "ansible/prepare-gdeploy.yml"
           end
+        end
 
-          ansible.playbook = "ansible/prepare-gdeploy.yml"
+	machine.vm.provider "libvirt" do |libvirt,override|
+          override.vm.provision :ansible do |ansible|
+            ansible.limit = "all"
+            ansible.extra_vars = { provider: "libvirt" }
+            ansible.playbook = "ansible/prepare-gdeploy.yml"
+          end
         end
 
         if clusterInit == 1
@@ -167,3 +205,4 @@ Vagrant.configure(2) do |config|
     end
   end
 end
+
