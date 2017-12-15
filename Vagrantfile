@@ -151,7 +151,7 @@ Vagrant.configure(2) do |config|
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
-        vb.name = "RHGS#{vmNum.to_s}-RHEL7"
+        vb.name = "RHGS#{vmNum.to_s}"
 
         vBoxAttachDisks( numberOfDisks, vb, "RHGS#{vmNum.to_s}" )
 
