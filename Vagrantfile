@@ -145,9 +145,9 @@ Vagrant.configure(2) do |config|
         # Make this a linked clone
         vb.linked_clone = true
 
-	# Set VM resources
-	vb.memory = VMMEM
-	vb.cpus = VMCPU
+        # Set VM resources
+        vb.memory = VMMEM
+        vb.cpus = VMCPU
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
@@ -161,48 +161,48 @@ Vagrant.configure(2) do |config|
       end
 
       machine.vm.provider "libvirt" do |libvirt, override|
-	override.vm.box = RHGS_VERSION
-        override.vm.network "private_network", type: "dhcp", auto_config: false, libvirt__domain_name: "RHGS#{vmNum.to_s}-RHEL7"
-	override.vm.synced_folder ".", "/vagrant", disabled: true
+        override.vm.box = RHGS_VERSION
+        override.vm.network "private_network", type: "dhcp", auto_config: false
+        override.vm.synced_folder ".", "/vagrant", disabled: true
 
-	libvirt.memory = VMMEM
-	libvirt.cpus = VMCPU
-	libvirt.nic_model_type = "virtio"
+        libvirt.memory = VMMEM
+        libvirt.cpus = VMCPU
+        libvirt.nic_model_type = "virtio"
         libvirt.disk_bus = "virtio"
-	libvirt.username = "root"
-#        libvirt.graphics_type = "spice"
-#        libvirt.video_type = "qxl"
+        libvirt.username = "root"
+        # libvirt.graphics_type = "spice"
+        # libvirt.video_type = "qxl"
 
-	libvirtAttachDisks( numberOfDisks, libvirt )
+        libvirtAttachDisks( numberOfDisks, libvirt )
       end
 
       if vmNum == numberOfVMs
-	machine.vm.provision :ansible do |ansible|
-          ansible.limit = "all"
-          ansible.playbook = "ansible/prepare-environment.yml"
-        end
-
-	machine.vm.provider "virtualbox" do |virtualbox,override|
-	  override.vm.provision :ansible do |ansible|
-	    ansible.limit = "all"
+        machine.vm.provider "virtualbox" do |virtualbox,override|
+          override.vm.provision :ansible do |ansible|
+            ansible.limit = "all"
             ansible.extra_vars = { provider: "virtualbox" }
-            ansible.playbook = "ansible/prepare-gdeploy.yml"
+            ansible.playbook = "ansible/prepare-environment.yml"
+          end
+
+          if clusterInit == 1
+            override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
           end
         end
 
-	machine.vm.provider "libvirt" do |libvirt,override|
+        machine.vm.provider "libvirt" do |libvirt,override|
           override.vm.provision :ansible do |ansible|
             ansible.limit = "all"
             ansible.extra_vars = { provider: "libvirt" }
-            ansible.playbook = "ansible/prepare-gdeploy.yml"
+            ansible.playbook = "ansible/prepare-environment.yml"
           end
-        end
 
-        if clusterInit == 1
-          machine.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
+          # awkward reptition due to lack of provisioner priority in Vagrant
+          if clusterInit == 1
+            override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
+          end
         end
       end
     end
   end
-end
 
+end

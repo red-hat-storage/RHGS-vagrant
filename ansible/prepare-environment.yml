@@ -10,4 +10,16 @@
       template:
         src: hosts.j2
         dest: /etc/hosts
+
+    - name: generate gdeploy.conf for virtualbox
+      template:
+        src: gdeploy-virtualbox.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+      when: provider == "virtualbox"
+
+    - name: generate gdeploy.conf for libvirt
+      template:
+        src: gdeploy-libvirt.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+      when: provider == "libvirt"
 ...
