@@ -69,6 +69,7 @@ if ARGV[0] == "up"
   environment.puts("# BEWARE: Do NOT modify ANY settings in here or your vagrant environment will be messed up")
   environment.puts(numberOfVMs.to_s)
   environment.puts(numberOfDisks.to_s)
+  environment.puts(clusterInit.to_s)
   environment.close
 
   print "\e[32m\nOK I will provision #{numberOfVMs} VMs for you and each one will have #{numberOfDisks} disks for bricks\e[37m\n"
@@ -86,6 +87,7 @@ else # So that we destroy and can connect to all VMs...
     environment.readline # Skip the comment on top
     numberOfVMs = environment.readline.to_i
     numberOfDisks = environment.readline.to_i
+    clusterInit = environment.readline.to_i
     environment.close
   rescue # File was deleted or is unreadable and we just don't care...
     numberOfVMs = 2
