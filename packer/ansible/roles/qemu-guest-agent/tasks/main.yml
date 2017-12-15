@@ -3,7 +3,7 @@
 - name: install qemu guest agent
   yum: name=qemu-guest-agent state=present
 
-- name: enable and start qemu guest agent
-  service: name=qemu-guest-agent state=started enabled=yes
+- name: enable but don't start qemu guest agent
+  service: name=qemu-guest-agent state=stopped enabled=yes
 
 ...
