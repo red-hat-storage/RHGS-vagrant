@@ -128,7 +128,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provider "libvirt" do |libvirt, override|
-    override.vm.box_url = "file:///tmp/rhgs-rhel-7-virtualbox/libvirt-#{RHGS_VERSION}.box"
+    override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/libvirt-#{RHGS_VERSION}.box"
     libvirt.storage_pool_name = ENV['LIBVIRT_STORAGE_POOL'] || 'default'
   end
 
