@@ -7,7 +7,6 @@
     {
       "type": "qemu",
       "accelerator": "kvm",
-      "qemu_binary": "/usr/libexec/qemu-kvm",
       "boot_command": [
         "<up><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhgs-rhel-7-ks.cfg<enter><wait>"
       ],
@@ -29,8 +28,9 @@
       "vm_name": "packer-rhgs-3.3.1-rhel-7",
       "qemuargs": [
         ["-m", "2048M"],
-        ["-smp", "cpus=1,cores=2"]
-      ]
+        ["-smp", "cpus=1,cores=2,maxcpus=2"]
+      ],
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
