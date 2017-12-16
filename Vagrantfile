@@ -19,8 +19,10 @@ RHGS_VERSION = "rhgs-3.3.1-rhel-7"
 #################
 # General VM settings applied to all VMs
 #################
-VMCPU = 1
-VMMEM = 1024
+VMCPU = 1         # number of cores per VM
+VMMEM = 1024      # amount of memory in MB per VM
+VMDISK = 30       # size of brick disks in GB per VM
+
 #################
 
 numberOfVMs = 0
@@ -108,7 +110,7 @@ def vBoxAttachDisks(numDisk, provider, boxName)
   for i in 1..numDisk.to_i
     file_to_disk = File.join(VAGRANT_ROOT, 'disks', ( boxName + '-' +'disk' + i.to_s + '.vdi' ))
     unless File.exist?(file_to_disk)
-      provider.customize ['createhd', '--filename', file_to_disk, '--size', 100 * 1024] # 30GB brick device
+      provider.customize ['createhd', '--filename', file_to_disk, '--size', VMDISK * 1024]
     end
     provider.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', i, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
@@ -116,7 +118,7 @@ end
 
 def libvirtAttachDisks(numDisk, provider)
   for i in 1..numDisk.to_i
-    provider.storage :file, :bus => 'virtio', :size => '100G'
+    provider.storage :file, :bus => 'virtio', :size => '"#{VMDISK}"G'
   end
 end
 
@@ -135,16 +137,17 @@ Vagrant.configure(2) do |config|
   (1..numberOfVMs).each do |vmNum|
     config.vm.define "RHGS#{vmNum.to_s}" do |machine|
 
-      # Provider-indepent options
+      # Provider-independent options
       machine.vm.hostname = "RHGS#{vmNum.to_s}"
+      machine.vm.box = RHGS_VERSION
+      machine.vm.synced_folder ".", "/vagrant", disabled: true
 
       machine.vm.provider "virtualbox" do |vb, override|
 
-        # This will be the private VM-only network where GlusterFS traffic will flow
+        # private VM-only network where GlusterFS traffic will flow
         override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
-        override.vm.box = RHGS_VERSION
 
-        # Make this a linked clone
+        # Make this a linked clone for cow snapshot based root disks
         vb.linked_clone = true
 
         # Set VM resources
@@ -153,8 +156,11 @@ Vagrant.configure(2) do |config|
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
+
+        # give this VM a proper name
         vb.name = "RHGS#{vmNum.to_s}"
 
+        # attach brick disks
         vBoxAttachDisks( numberOfDisks, vb, "RHGS#{vmNum.to_s}" )
 
         # Accelerate SSH / Ansible connections (https://github.com/mitchellh/vagrant/issues/1807)
@@ -163,18 +169,22 @@ Vagrant.configure(2) do |config|
       end
 
       machine.vm.provider "libvirt" do |libvirt, override|
-        override.vm.box = RHGS_VERSION
-        override.vm.network "private_network", type: "dhcp", auto_config: false
-        override.vm.synced_folder ".", "/vagrant", disabled: true
 
+        # private VM-only network where GlusterFS traffic will flow
+        override.vm.network "private_network", type: "dhcp", auto_config: false
+
+        # Set VM resources
         libvirt.memory = VMMEM
         libvirt.cpus = VMCPU
+
+        # Use virtio device drivers
         libvirt.nic_model_type = "virtio"
         libvirt.disk_bus = "virtio"
-        libvirt.username = "root"
-        # libvirt.graphics_type = "spice"
-        # libvirt.video_type = "qxl"
 
+        # connect to local libvirt daemon as root
+        libvirt.username = "root"
+
+        # attach brick disks
         libvirtAttachDisks( numberOfDisks, libvirt )
       end
 
