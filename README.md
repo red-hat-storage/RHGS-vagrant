@@ -5,7 +5,6 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 
 ## Requirements
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
-* [Packer](https://www.packer.io) (starting 1.1.3)
 * [Ansible](https://ansible.com) (starting 2.4.2.0)
 * git
 
