@@ -4,7 +4,9 @@ A Vagrant setup for Red Hat Gluster Storage version 3.3 update 1.
 This will setup as many RHGS nodes as you want with a number of bricks that you can define!  
 
 ## Requirements
-* [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
+* macOS with [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
+  - or -
+* RHEL 7.4/CentOS 1708/Fedora 27 with KVM/libvirt
 * [Ansible](https://ansible.com) (starting 2.4.2.0)
 * git
 
