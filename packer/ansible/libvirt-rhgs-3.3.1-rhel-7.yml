@@ -14,5 +14,6 @@
     - qemu-guest-agent
     - authorized-key
     - rhgs-node
+    - tendrl-node
 
 ...

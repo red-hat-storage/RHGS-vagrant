@@ -1,0 +1,37 @@
+---
+
+- name: pre-install tendrl components
+  yum: name={{ item }} state=present
+  with_items:
+    - ansible
+    - tendrl-ansible
+    - tendrl-selinux
+    - etcd
+    - tendrl-api
+    - tendrl-monitoring-integration
+    - carbon-selinux
+    - tendrl-grafana-selinux
+    - tendrl-node-agent
+    - tendrl-notifier
+    - tendrl-ui
+    - tendrl-collectd-selinux
+    - tendrl-gluster-integration
+
+- name: update all remaining packages
+  yum: name=* state=latest
+
+- name: disable tendrl services
+  service: name={{ item }} state=stopped enabled=no
+  with_items:
+    - etcd
+    - tendrl-api
+    - httpd
+    - tendrl-node-agent
+    - tendrl-monitoring-integration
+    - grafana-server
+    - tendrl-notifier
+    - tendrl-api
+    - carbon-cache
+    - grafana-server
+    
+...

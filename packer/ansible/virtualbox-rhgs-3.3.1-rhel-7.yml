@@ -14,5 +14,6 @@
     - vbox-guest-additions
     - authorized-key
     - rhgs-node
+    - tendrl-node
 
 ...

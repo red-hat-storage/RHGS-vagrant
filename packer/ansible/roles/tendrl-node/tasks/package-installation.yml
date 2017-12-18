@@ -1,0 +1,10 @@
+---
+
+- include_tasks: scenarios/rhgs-3.3.1-rhel-7.yml
+  when:
+    - os_version is defined
+    - os_version == "rhel-7"
+    - rhgs_version is defined
+    - rhgs_version == "3.3.1"
+    
+...
