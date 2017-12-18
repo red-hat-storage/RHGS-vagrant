@@ -118,7 +118,7 @@ end
 
 def libvirtAttachDisks(numDisk, provider)
   for i in 1..numDisk.to_i
-    provider.storage :file, :bus => 'virtio', :size => '"#{VMDISK}"G'
+    provider.storage :file, :bus => 'virtio', :size => VMDISK
   end
 end
 
