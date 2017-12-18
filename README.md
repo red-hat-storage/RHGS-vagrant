@@ -84,7 +84,7 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
-  * all block devices have been set up of VGs, LVs, formatted and mounted (gdeploy's standard backend-setup)
+  * all block devices have been set up of VGs, LVs, formatted and mounted (`gdeploy`'s standard backend-setup)
   * brick directories have been created
 
 
