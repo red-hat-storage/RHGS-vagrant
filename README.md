@@ -6,8 +6,37 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 ## Requirements
 * macOS with [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30) **or**
 * RHEL 7.4/CentOS 1708/Fedora 27 with KVM/libvirt
-* [Ansible](https://ansible.com) (starting 2.4.2.0)
+* [Ansible](https://ansible.com) (starting 2.4.1.0)
+* [Vagrant](https://www.vagrantup.com) (starting 1.9.1)
 * git
+
+## Installation instructions for Vagrant / Ansible
+
+#### On RHEL 7.4
+
+* make sure you are logged in as a user with `sudo` privileges
+* make sure your system has the following repositories enabled (`yum repolist`)
+  * rhel-7-server-rpms
+  * rhel-7-server-extras-rpms
+* install the requirements
+  * `sudo yum groupinstall "Virtualization Host"`
+  * `sudo yum install ansible git gcc libvirt-devel`
+  * `sudo yum install https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.rpm`
+* start `libvirtd`
+  * `sudo systemctl enable libvirtd`
+  * `sudo systemctl start libvirtd`
+* enable libvirt access without password
+  * `sudo gpasswd -a $USER libvirt`
+  * `newgrp libvirt`
+* as your normal user, install the libvirt plugin for vagrant
+  * `vagrant plugin install vagrant-libvirt`
+
+
+* make sure you are logged in as a user with `sudo` privileges
+* make sure your system has the following repositories enabled (`dnf repolist`)
+  * fedora
+  * fedora-updates
+* install the requirements
 
 ## Get started
 * You **must** be in the Red Hat VPN
