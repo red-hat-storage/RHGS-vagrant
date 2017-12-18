@@ -47,6 +47,18 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * as your normal user, install the libvirt plugin for vagrant
   * `vagrant plugin install vagrant-libvirt`
 
+#### On macOS High Sierra
+
+* install the requirements
+  * install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+  * install [Vagrant](https://www.vagrantup.com)
+  * install [homebrew](https://brew.sh/)
+  * install git
+    * `brew install git`
+  * install ansible
+    * `pip install ansible`
+
+
 ## Get started
 * You **must** be in the Red Hat VPN
 * Clone this repository
