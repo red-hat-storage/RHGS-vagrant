@@ -20,18 +20,4 @@
 - name: update all remaining packages
   yum: name=* state=latest
 
-- name: disable tendrl services
-  service: name={{ item }} state=stopped enabled=no
-  with_items:
-    - etcd
-    - tendrl-api
-    - httpd
-    - tendrl-node-agent
-    - tendrl-monitoring-integration
-    - grafana-server
-    - tendrl-notifier
-    - tendrl-api
-    - carbon-cache
-    - grafana-server
-    
 ...
