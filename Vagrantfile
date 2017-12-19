@@ -147,7 +147,7 @@ end
 Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box_url = "file:///tmp/rhgs-rhel-7/virtualbox-#{RHGS_VERSION}.box"
+    override.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
   end
 
   config.vm.provider "libvirt" do |libvirt, override|
