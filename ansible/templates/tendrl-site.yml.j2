@@ -83,3 +83,13 @@
     graphite_fqdn: "{{ hostvars[groups['tendrl-server'][0]].ansible_fqdn }}"
   roles:
     - tendrl-ansible.tendrl-storage-node
+
+- hosts: tendrl-server
+  user: vagrant
+  become: yes
+  vars:
+    second_nic: "{{ hostvars[groups['tendrl-server'][0]].ansible_interfaces | difference(['lo',ansible_default_ipv4.alias]) | first }}"
+    second_nic_ip: "{{ hostvars[groups['tendrl-server'][0]]['ansible_' + second_nic]['ipv4']['address'] }}"
+  tasks:
+    - name: "Provisioning finished!"
+      debug: msg="Gluster Web Admin (tendrl) is running at http://{{ second_nic_ip }}/ - username = 'admin' / password = 'adminuser'"
