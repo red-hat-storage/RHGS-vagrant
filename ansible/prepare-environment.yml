@@ -22,4 +22,5 @@
         src: gdeploy-libvirt.conf.j2
         dest: /home/vagrant/gdeploy.conf
       when: provider == "libvirt"
+
 ...

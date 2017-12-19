@@ -28,6 +28,7 @@ VMDISK = 30       # size of brick disks in GB per VM
 numberOfVMs = 0
 numberOfDisks = -1
 clusterInit = -1
+tendrlInit = 1
 
 if ARGV[0] == "up"
 
@@ -126,7 +127,7 @@ end
 Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
+    override.vm.box_url = "file:///tmp/rhgs-rhel-7/virtualbox-#{RHGS_VERSION}.box"
   end
 
   config.vm.provider "libvirt" do |libvirt, override|
@@ -199,6 +200,23 @@ Vagrant.configure(2) do |config|
           if clusterInit == 1
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
           end
+
+          override.vm.provision :ansible do |ansible|
+            if tendrlInit == 1
+              ansible.limit = "all"
+              ansible.groups = { "first" => "RHGS1" }
+              ansible.playbook = "ansible/prepare-tendrl.yml"
+            end
+          end
+
+          override.vm.provision :ansible_local do |ansible_local|
+            if tendrlInit == 1
+              ansible_local.limit = "all"
+              ansible_local.provisioning_path = "/home/vagrant/"
+              ansible_local.inventory_path = "tendrl-inventory"
+              ansible_local.playbook = "tendrl-site.yml"
+            end
+          end
         end
 
         machine.vm.provider "libvirt" do |libvirt,override|
@@ -211,6 +229,23 @@ Vagrant.configure(2) do |config|
           # awkward reptition due to lack of provisioner priority in Vagrant
           if clusterInit == 1
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
+          end
+
+          override.vm.provision :ansible do |ansible|
+            if tendrlInit == 1
+              ansible.limit = "all"
+              ansible.groups = { "first" => "RHGS1" }
+              ansible.playbook = "ansible/prepare-tendrl.yml"
+            end
+          end
+
+          override.vm.provision :ansible_local do |ansible_local|
+            if tendrlInit == 1
+              ansible_local.limit = "all"
+              ansible_local.provisioning_path = "/home/vagrant/"
+              ansible_local.inventory_path = "tendrl-inventory"
+              ansible_local.playbook = "tendrl-site.yml"
+            end
           end
         end
       end
