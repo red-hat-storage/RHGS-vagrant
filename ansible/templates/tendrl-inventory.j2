@@ -1,0 +1,9 @@
+[tendrl-server]
+{% for host in groups["first"]|sort %}
+{{ hostvars[host]["ansible_hostname"] }}.local
+{% endfor %}
+
+[gluster-servers]
+{% for host in groups["all"]|sort %}
+{{ hostvars[host]["ansible_hostname"] }}.local
+{% endfor %}

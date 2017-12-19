@@ -10,4 +10,39 @@
       template:
         src: hosts.j2
         dest: /etc/hosts
+
+    - name: generate gdeploy.conf for virtualbox
+      template:
+        src: gdeploy-virtualbox.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+      when: provider == "virtualbox"
+
+    - name: generate gdeploy.conf for libvirt
+      template:
+        src: gdeploy-libvirt.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+      when: provider == "libvirt"
+
+    - name: generate tendrl inventory
+      template:
+        src: tendrl-inventory.j2
+        dest: /home/vagrant/tendrl-inventory
+
+    - name: create playbook for tendrl installation
+      template:
+        src: tendrl-site.yml.j2
+        dest: /home/vagrant/tendrl-site.yml
+        block_start_string: "[%"
+        block_end_string: "%]"
+        variable_start_string: "[["
+        variable_end_string: "]]"
+
+    - name: remove generic machine id
+      file:
+        path: /etc/machine-id
+        state: absent
+
+    - name: re-generate machine id
+      shell: systemd-machine-id-setup
+
 ...

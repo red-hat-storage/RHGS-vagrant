@@ -4,10 +4,60 @@ A Vagrant setup for Red Hat Gluster Storage version 3.3 update 1.
 This will setup as many RHGS nodes as you want with a number of bricks that you can define!  
 
 ## Requirements
-* [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
-* [Packer](https://www.packer.io) (starting 1.1.3)
-* [Ansible](https://ansible.com) (starting 2.4.2.0)
+* macOS with [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30) **or**
+* RHEL 7.4/Fedora 27 with KVM/libvirt
+* [Ansible](https://ansible.com) (starting 2.4.0.0)
+* [Vagrant](https://www.vagrantup.com) (starting 1.9.1)
 * git
+
+## Installation instructions for Vagrant / Ansible
+
+#### On RHEL 7.4
+
+* make sure you are logged in as a user with `sudo` privileges
+* make sure your system has the following repositories enabled (`yum repolist`)
+  * rhel-7-server-rpms
+  * rhel-7-server-extras-rpms
+* install the requirements
+  * `sudo yum groupinstall "Virtualization Host"`
+  * `sudo yum install ansible git gcc libvirt-devel`
+  * `sudo yum install https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.rpm`
+* start `libvirtd`
+  * `sudo systemctl enable libvirtd`
+  * `sudo systemctl start libvirtd`
+* enable libvirt access for your current user
+  * `sudo gpasswd -a $USER libvirt`
+* as your normal user, install the libvirt plugin for vagrant
+  * `vagrant plugin install vagrant-libvirt`
+
+#### On Fedora 27
+
+* make sure you are logged in as a user with `sudo` privileges
+* make sure your system has the following repositories enabled (`dnf repolist`)
+  * fedora
+  * fedora-updates
+* install the requirements
+  * `sudo dnf install ansible git gcc libvirt-devel libvirt qemu-kvm`
+  * `sudo dnf install vagrant vagrant-libvirt`
+* start `libvirtd`
+  * `sudo systemctl enable libvirtd`
+  * `sudo systemctl start libvirtd`
+* enable libvirt access for your current user
+  * `sudo gpasswd -a $USER libvirt`
+* as your normal user, install the libvirt plugin for vagrant
+  * `vagrant plugin install vagrant-libvirt`
+
+#### On macOS High Sierra
+
+* install the requirements
+  * install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+  * install [Vagrant](https://www.vagrantup.com)
+  * install [homebrew](https://brew.sh/)
+  * install git
+    * `brew install git`
+  * install ansible
+    * `pip install ansible`
+
 
 ## Get started
 * You **must** be in the Red Hat VPN
@@ -34,7 +84,7 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
-  * all block devices have been set up of VGs, LVs, formatted and mounted (gdeploy's standard backend-setup)
+  * all block devices have been set up of VGs, LVs, formatted and mounted (`gdeploy`'s standard backend-setup)
   * brick directories have been created
 
 
