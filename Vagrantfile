@@ -28,7 +28,7 @@ VMDISK = 30       # size of brick disks in GB per VM
 numberOfVMs = 0
 numberOfDisks = -1
 clusterInit = -1
-tendrlInit = 1
+tendrlInit = -1
 
 if ARGV[0] == "up"
 
@@ -56,31 +56,50 @@ if ARGV[0] == "up"
   print "\e[1;37mDo you want me to initialize the cluster for you? [no] \e[32m"
 
   while clusterInit == -1
-    response = $stdin.gets.strip.to_s
+    clusterInitResponse = $stdin.gets.strip.to_s
 
-    if response == 'yes' or response == 'y'
+    if clusterInitResponse == 'yes' or clusterInitResponse == 'y'
       clusterInit = 1
-    elsif response == 'no' or response == 'n' or response == ''
+
+      print "\e[1;37mDo you want me to install the web admin interface (tendrl) for you? [no] \e[32m"
+
+      while tendrlInit == -1
+        tendrlInitResponse = $stdin.gets.strip.to_s
+
+        if tendrlInitResponse == 'yes' or tendrlInitResponse == 'y'
+          tendrlInit = 1
+        elsif tendrlInitResponse == 'no' or tendrlInitResponse == 'n' or tendrlInitResponse == ''
+          tendrlInit = 0
+        else
+          print "\e[31mPlease enter 'yes' or 'no'\e[32m"
+        end
+      end
+    elsif clusterInitResponse == 'no' or clusterInitResponse == 'n' or clusterInitResponse == ''
       clusterInit = 0
     else
       print "\e[31mPlease enter 'yes' or 'no'\e[32m"
     end
   end
 
-
   environment = open('vagrant_env.conf', 'w')
   environment.puts("# BEWARE: Do NOT modify ANY settings in here or your vagrant environment will be messed up")
   environment.puts(numberOfVMs.to_s)
   environment.puts(numberOfDisks.to_s)
   environment.puts(clusterInit.to_s)
+  environment.puts(tendrlInit.to_s)
   environment.close
 
   print "\e[32m\nOK I will provision #{numberOfVMs} VMs for you and each one will have #{numberOfDisks} disks for bricks\e[37m\n"
 
   if clusterInit == 1
-    print "\e[32m\nAlso, I will initialize the cluster for you\e[37m\n\n"
+
+    if tendrlInit == 1
+      print "\e[32m\nAlso, I will initialize the cluster for you and deploy the web admin console (tendrl)\e[37m\n\n"
+    else
+      print "\e[32m\nAlso, I will initialize the cluster for you and leave tendrl inventory/playbook for your convenience\e[37m\n\n"
+    end
   else
-    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf for your convenience\e[37m\n\n"
+    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf and a tendrl inventory/playbook for your convenience\e[37m\n\n"
   end
 
   system "sleep 1"
@@ -91,6 +110,7 @@ else # So that we destroy and can connect to all VMs...
     numberOfVMs = environment.readline.to_i
     numberOfDisks = environment.readline.to_i
     clusterInit = environment.readline.to_i
+    tendrlInit = environment.readline.to_i
     environment.close
   rescue # File was deleted or is unreadable and we just don't care...
     numberOfVMs = 2
@@ -100,7 +120,7 @@ else # So that we destroy and can connect to all VMs...
 
 
 
-  if ARGV[0] != "ssh-config"
+  if ARGV[0] != "ssh-config" && ARGV[0] != "ssh"
     puts "Detected settings from previous vagrant up:"
     puts "  We deployed #{numberOfVMs} VMs with each #{numberOfDisks} disks"
     puts ""
@@ -193,6 +213,7 @@ Vagrant.configure(2) do |config|
         machine.vm.provider "virtualbox" do |virtualbox,override|
           override.vm.provision :ansible do |ansible|
             ansible.limit = "all"
+            ansible.groups = { "first" => "RHGS1" }
             ansible.extra_vars = { provider: "virtualbox" }
             ansible.playbook = "ansible/prepare-environment.yml"
           end
@@ -201,16 +222,8 @@ Vagrant.configure(2) do |config|
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
           end
 
-          override.vm.provision :ansible do |ansible|
-            if tendrlInit == 1
-              ansible.limit = "all"
-              ansible.groups = { "first" => "RHGS1" }
-              ansible.playbook = "ansible/prepare-tendrl.yml"
-            end
-          end
-
-          override.vm.provision :ansible_local do |ansible_local|
-            if tendrlInit == 1
+          if tendrlInit == 1
+            override.vm.provision :ansible_local do |ansible_local|
               ansible_local.limit = "all"
               ansible_local.provisioning_path = "/home/vagrant/"
               ansible_local.inventory_path = "tendrl-inventory"
@@ -222,6 +235,7 @@ Vagrant.configure(2) do |config|
         machine.vm.provider "libvirt" do |libvirt,override|
           override.vm.provision :ansible do |ansible|
             ansible.limit = "all"
+            ansible.groups = { "first" => "RHGS1" }
             ansible.extra_vars = { provider: "libvirt" }
             ansible.playbook = "ansible/prepare-environment.yml"
           end
@@ -231,16 +245,8 @@ Vagrant.configure(2) do |config|
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
           end
 
-          override.vm.provision :ansible do |ansible|
-            if tendrlInit == 1
-              ansible.limit = "all"
-              ansible.groups = { "first" => "RHGS1" }
-              ansible.playbook = "ansible/prepare-tendrl.yml"
-            end
-          end
-
-          override.vm.provision :ansible_local do |ansible_local|
-            if tendrlInit == 1
+          if tendrlInit == 1
+            override.vm.provision :ansible_local do |ansible_local|
               ansible_local.limit = "all"
               ansible_local.provisioning_path = "/home/vagrant/"
               ansible_local.inventory_path = "tendrl-inventory"
