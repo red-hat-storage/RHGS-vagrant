@@ -150,7 +150,7 @@ end
 Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box_url = "file:///tmp/rhgs-rhel-7/virtualbox-#{RHGS_VERSION}.box"
+    override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
   end
 
   config.vm.provider "libvirt" do |libvirt, override|
@@ -257,7 +257,7 @@ Vagrant.configure(2) do |config|
       machine.vm.synced_folder ".", "/vagrant", disabled: true
 
       machine.vm.provider "virtualbox" do |vb, override|
-        override.vm.box_url = "file:///tmp/rhgs-rhel-7/virtualbox-#{TENDRL_VERSION}.box"
+        override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{TENDRL_VERSION}.box"
 
         # private VM-only network where GlusterFS traffic will flow
         override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
