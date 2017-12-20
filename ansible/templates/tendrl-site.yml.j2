@@ -43,7 +43,7 @@
   become: yes
   vars:
 
-    [% set first_host = groups['first']|first %]
+    [% set first_host = groups['tendrl-server']|first %]
     [% set etcd_fqdn = hostvars[first_host].ansible_hostname  + ".local" %]
     [% set etcd_nic = hostvars[first_host].ansible_interfaces | difference(["lo",hostvars[first_host].ansible_default_ipv4.alias]) | first %]
     [% set etcd_nic_ip = hostvars[first_host]["ansible_" + etcd_nic]["ipv4"]["address"] %]

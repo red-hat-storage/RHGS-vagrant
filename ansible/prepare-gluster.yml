@@ -1,0 +1,24 @@
+---
+
+- hosts: rhgs-nodes
+
+  become: true
+
+  tasks:
+    - name: generate gdeploy.conf for virtualbox
+      template:
+        src: gdeploy-virtualbox.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+        owner: vagrant
+        group: vagrant
+      when: provider == "virtualbox"
+
+    - name: generate gdeploy.conf for libvirt
+      template:
+        src: gdeploy-libvirt.conf.j2
+        dest: /home/vagrant/gdeploy.conf
+        owner: vagrant
+        group: vagrant
+      when: provider == "libvirt"
+
+...

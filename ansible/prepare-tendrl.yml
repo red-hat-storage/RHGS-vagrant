@@ -1,0 +1,35 @@
+---
+
+- hosts: rhgs-nodes
+
+  become: true
+
+  tasks:
+
+    - setup:
+
+- hosts: tendrl-server
+
+  become: true
+
+  tasks:
+
+  - name: generate tendrl inventory
+    template:
+      src: tendrl-inventory.j2
+      dest: /home/vagrant/tendrl-inventory
+      owner: vagrant
+      group: vagrant
+
+  - name: create playbook for tendrl installation
+    template:
+      src: tendrl-site.yml.j2
+      dest: /home/vagrant/tendrl-site.yml
+      block_start_string: "[%"
+      block_end_string: "%]"
+      variable_start_string: "[["
+      variable_end_string: "]]"
+      owner: vagrant
+      group: vagrant
+
+...
