@@ -67,7 +67,7 @@
     "type": "ansible",
     "only": ["rhgs-node"],
     "user": "vagrant",
-    "playbook_file": "ansible/libvirt-rhgs-3.3.1-rhel-7.yml",
+    "playbook_file": "ansible/libvirt-rhgs-node-3.3.1-rhel-7.yml",
     "extra_arguments": [
         "--become"
       ]
