@@ -1,7 +1,8 @@
 # RHGS 3.3.1 in Vagrant
 
 A Vagrant setup for Red Hat Gluster Storage version 3.3 update 1.
-This will setup as many RHGS nodes as you want with a number of bricks that you can define!  
+This will setup as many RHGS nodes as you want with a number of bricks that you can define!
+Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl).
 
 ## Requirements
 * macOS with [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30) **or**
@@ -68,16 +69,18 @@ This will setup as many RHGS nodes as you want with a number of bricks that you 
 * Run `vagrant up`
   * Decide how many RHGS nodes and how many bricks you need
   * Decide if you want vagrant to initialize the cluster (`gdeploy`) for you
+  * If you opted to initialize the cluster, decide whether you want to deploy tendrl
   * Wait a while
 
 ## Usage
-* You can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
+* After `vagrant up` you can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
 * Each VM is called RHGSx where x starts with 1
- * RHGS1 is your first VM and it counts up depending on the amount of VMs you spawn
+  * RHGS1 is your first VM and it counts up depending on the amount of VMs you spawn
+  * RHGS1 hosts your tendrl server if you selected to deploy it
 * There are also other vagrant commands you should check out!
- * Try vagrant -h to find out about them
+  * Try `vagrant -h` to find out about them
 * *Always make sure you are in the git repo - vagrant only works in there!*
-* modify the `RHGS_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster versions
+* modify the `RHGS_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster versions (tendrl is currently RHEL-only)
 
 ## More info
 * After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user
