@@ -59,7 +59,8 @@
       "qemuargs": [
         ["-m", "2048M"],
         ["-smp", "cpus=1,cores=2,maxcpus=2"]
-      ]
+      ],
+      "vnc_bind_address": "0.0.0.0"
     }
   ],
   "provisioners": [
