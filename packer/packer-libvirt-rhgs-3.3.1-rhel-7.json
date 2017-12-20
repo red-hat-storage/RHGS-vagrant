@@ -87,7 +87,7 @@
     {
       "type": "vagrant",
       "compression_level": 9,
-      "output": "{{ user `output_directory` }}/libvirt-rhgs-3.3.1-rhel-7.box"
+      "output": "{{ user `output_directory` }}/libvirt-{{.BuildName}}-3.3.1-rhel-7.box"
     }
   ]
 }
