@@ -15,18 +15,24 @@
       template:
         src: gdeploy-virtualbox.conf.j2
         dest: /home/vagrant/gdeploy.conf
+        owner: vagrant
+        group: vagrant
       when: provider == "virtualbox"
 
     - name: generate gdeploy.conf for libvirt
       template:
         src: gdeploy-libvirt.conf.j2
         dest: /home/vagrant/gdeploy.conf
+        owner: vagrant
+        group: vagrant
       when: provider == "libvirt"
 
     - name: generate tendrl inventory
       template:
         src: tendrl-inventory.j2
         dest: /home/vagrant/tendrl-inventory
+        owner: vagrant
+        group: vagrant
 
     - name: create playbook for tendrl installation
       template:
@@ -36,6 +42,8 @@
         block_end_string: "%]"
         variable_start_string: "[["
         variable_end_string: "]]"
+        owner: vagrant
+        group: vagrant
 
     - name: remove generic machine id
       file:
