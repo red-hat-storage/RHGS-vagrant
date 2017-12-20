@@ -14,6 +14,13 @@
     permanent: yes
     immediate: yes
   with_items:
+    - 2379/tcp
+    - 2003/tcp
+    - 10080/tcp
+    - 80/tcp
+    - 9292/tcp
+    - 3000/tcp
+    - 8789/tcp
     - 8697/tcp
 
 ...

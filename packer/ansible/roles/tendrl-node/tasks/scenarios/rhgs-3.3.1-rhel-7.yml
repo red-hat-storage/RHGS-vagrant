@@ -1,21 +1,12 @@
 ---
 
-- name: pre-install tendrl components
+- name: pre-install tendrl node components
   yum: name={{ item }} state=present
   with_items:
-    - ansible
-    - tendrl-ansible
+    - libselinux-python
     - tendrl-selinux
-    - etcd
-    - tendrl-api
-    - tendrl-monitoring-integration
-    - carbon-selinux
-    - tendrl-grafana-selinux
     - tendrl-node-agent
-    - tendrl-notifier
-    - tendrl-ui
     - tendrl-collectd-selinux
-    - tendrl-gluster-integration
 
 - name: update all remaining packages
   yum: name=* state=latest
