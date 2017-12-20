@@ -99,10 +99,10 @@ if ARGV[0] == "up"
     if tendrlInit == 1
       print "\e[32m\nAlso, I will initialize the cluster for you and deploy the web admin console (tendrl)\e[37m\n\n"
     else
-      print "\e[32m\nAlso, I will initialize the cluster for you and leave tendrl inventory/playbook for your convenience\e[37m\n\n"
+      print "\e[32m\nAlso, I will initialize the cluster for you using gdeploy.\e[37m\n\n"
     end
   else
-    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf and a tendrl inventory/playbook for your convenience\e[37m\n\n"
+    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf for your convenience\e[37m\n\n"
   end
 
   system "sleep 1"
@@ -175,8 +175,8 @@ Vagrant.configure(2) do |config|
         vb.linked_clone = true
 
         # Set VM resources
-        vb.memory = VMMEM
-        vb.cpus = VMCPU
+        vb.memory = 2048
+        vb.cpus = 2
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
