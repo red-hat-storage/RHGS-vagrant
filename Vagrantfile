@@ -9,7 +9,10 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 #################
 # Set RHGS version
-RHGS_VERSION = "rhgs-3.3.1-rhel-7"
+RHGS_VERSION = "rhgs-node-3.3.1-rhel-7"
+
+# Set TENDRL version
+TENDRL_VERSION = "tendrl-server-3.3.1-rhel-7"
 
 # Currently available versions:
 # rhgs-3.3.1-rhel-7
@@ -61,7 +64,7 @@ if ARGV[0] == "up"
     if clusterInitResponse == 'yes' or clusterInitResponse == 'y'
       clusterInit = 1
 
-      print "\e[1;37mDo you want me to install the web admin interface (tendrl) for you? [no] \e[32m"
+      print "\e[1;37mDo you want me to deploy the web admin (tendrl) node for you? [no] \e[32m"
 
       while tendrlInit == -1
         tendrlInitResponse = $stdin.gets.strip.to_s
@@ -147,7 +150,7 @@ end
 Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box_url = "http://file.rdu.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
+    override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{RHGS_VERSION}.box"
   end
 
   config.vm.provider "libvirt" do |libvirt, override|
@@ -210,50 +213,109 @@ Vagrant.configure(2) do |config|
       end
 
       if vmNum == numberOfVMs
+
+        machine.vm.provision :ansible do |ansible|
+          ansible.limit = "all"
+          ansible.playbook = "ansible/prepare-environment.yml"
+        end
+
         machine.vm.provider "virtualbox" do |virtualbox,override|
           override.vm.provision :ansible do |ansible|
             ansible.limit = "all"
-            ansible.groups = { "first" => "RHGS1" }
+            ansible.groups = { "rhgs-nodes" => ["RHGS[1:#{numberOfVMs}]"] }
             ansible.extra_vars = { provider: "virtualbox" }
-            ansible.playbook = "ansible/prepare-environment.yml"
+            ansible.playbook = "ansible/prepare-gluster.yml"
           end
 
           if clusterInit == 1
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
-          end
-
-          if tendrlInit == 1
-            override.vm.provision :ansible_local do |ansible_local|
-              ansible_local.limit = "all"
-              ansible_local.provisioning_path = "/home/vagrant/"
-              ansible_local.inventory_path = "tendrl-inventory"
-              ansible_local.playbook = "tendrl-site.yml"
-            end
           end
         end
 
         machine.vm.provider "libvirt" do |libvirt,override|
           override.vm.provision :ansible do |ansible|
             ansible.limit = "all"
-            ansible.groups = { "first" => "RHGS1" }
+            ansible.groups = { "rhgs-nodes" => ["RHGS[1:#{numberOfVMs}]"] }
             ansible.extra_vars = { provider: "libvirt" }
-            ansible.playbook = "ansible/prepare-environment.yml"
+            ansible.playbook = "ansible/prepare-gluster.yml"
           end
 
           # awkward reptition due to lack of provisioner priority in Vagrant
           if clusterInit == 1
             override.vm.provision "shell", privileged: false, inline: "gdeploy -c gdeploy.conf"
           end
-
-          if tendrlInit == 1
-            override.vm.provision :ansible_local do |ansible_local|
-              ansible_local.limit = "all"
-              ansible_local.provisioning_path = "/home/vagrant/"
-              ansible_local.inventory_path = "tendrl-inventory"
-              ansible_local.playbook = "tendrl-site.yml"
-            end
-          end
         end
+      end
+    end
+  end
+
+  if tendrlInit == 1
+    config.vm.define "TENDRL" do |machine|
+      # Provider-independent options
+      machine.vm.hostname = "TENDRL"
+      machine.vm.box = TENDRL_VERSION
+      machine.vm.synced_folder ".", "/vagrant", disabled: true
+
+      machine.vm.provider "virtualbox" do |vb, override|
+        override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/virtualbox-#{TENDRL_VERSION}.box"
+
+        # private VM-only network where GlusterFS traffic will flow
+        override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
+
+        # Set VM resources
+        vb.memory = VMMEM
+        vb.cpus = VMCPU
+
+        # Don't display the VirtualBox GUI when booting the machine
+        vb.gui = false
+
+        # give this VM a proper name
+        vb.name = "TENDRL"
+
+        # Accelerate SSH / Ansible connections (https://github.com/mitchellh/vagrant/issues/1807)
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      end
+
+      machine.vm.provider "libvirt" do |libvirt, override|
+        # use libvirt box
+        override.vm.box_url = "http://file.str.redhat.com/~dmesser/rhgs-vagrant/libvirt-#{TENDRL_VERSION}.box"
+        libvirt.storage_pool_name = ENV['LIBVIRT_STORAGE_POOL'] || 'default'
+
+        # private VM-only network where GlusterFS traffic will flow
+        override.vm.network "private_network", type: "dhcp", auto_config: false
+
+        # Set VM resources
+        libvirt.memory = VMMEM
+        libvirt.cpus = VMCPU
+
+        # Use virtio device drivers
+        libvirt.nic_model_type = "virtio"
+        libvirt.disk_bus = "virtio"
+
+        # connect to local libvirt daemon as root
+        libvirt.username = "root"
+      end
+
+      machine.vm.provision :ansible do |ansible|
+        ansible.limit = "all"
+        ansible.playbook = "ansible/prepare-environment.yml"
+      end
+
+      machine.vm.provision :ansible do |ansible|
+        ansible.limit = "all"
+        ansible.groups = {
+          "tendrl-server" => ["TENDRL"],
+          "rhgs-nodes" => ["RHGS[1:#{numberOfVMs}]"]
+        }
+        ansible.playbook = "ansible/prepare-tendrl.yml"
+      end
+
+      machine.vm.provision :ansible_local do |ansible_local|
+        ansible_local.limit = "all"
+        ansible_local.provisioning_path = "/home/vagrant/"
+        ansible_local.inventory_path = "tendrl-inventory"
+        ansible_local.playbook = "tendrl-site.yml"
       end
     end
   end

@@ -11,4 +11,5 @@ vagrant_env.conf
 packer_vars
 vagrant_env.conf
 packer/output-*
+*.retry
 ansible/fetch
