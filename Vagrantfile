@@ -11,13 +11,17 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 # Set RHGS version
 RHGS_VERSION = "rhgs-node-3.3.1-rhel-7"
 
+# Currently available versions:
+# rhgs-node-3.3.1-rhel-7
+#################
+
 # Set TENDRL version
 TENDRL_VERSION = "tendrl-server-3.3.1-rhel-7"
 
 # Currently available versions:
-# rhgs-3.3.1-rhel-7
-# rhgs-3.3.1-centos-7
+# tendrl-server-3.3.1-rhel-7
 #################
+
 
 #################
 # General VM settings applied to all VMs

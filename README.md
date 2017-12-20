@@ -80,7 +80,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 * There are also other vagrant commands you should check out!
   * Try `vagrant -h` to find out about them
 * *Always make sure you are in the git repo - vagrant only works in there!*
-* modify the `RHGS_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster versions (tendrl is currently RHEL-only)
+* modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
 
 ## More info
 * After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user
