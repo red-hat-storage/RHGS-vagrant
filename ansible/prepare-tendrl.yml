@@ -14,6 +14,41 @@
 
   tasks:
 
+  - name: fetch vagrant ssh keys from one of the RHGSs nodes
+    fetch:
+      src: /home/vagrant/.ssh/{{ item }}
+      dest: fetch/
+      flat: yes
+    with_items:
+      - id_rsa
+      - id_rsa.pub
+    delegate_to: "RHGS1"
+
+  - name: put keys into vagrant user on TENDRL node
+    copy:
+      src: fetch/{{ item }}
+      dest: /home/vagrant/.ssh/
+      owner: vagrant
+      group: vagrant
+      mode: 0400
+    with_items:
+      - id_rsa
+      - id_rsa.pub
+
+  - name: add pub keys to authorized_keys
+    authorized_key:
+      user: vagrant
+      key: "{{ lookup('file', 'fetch/id_rsa.pub') }}"
+      state: present
+
+  - name: disable host key checking
+    blockinfile:
+      path: /home/vagrant/.ssh/config
+      block: |
+        Host TENDRL*
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+
   - name: generate tendrl inventory
     template:
       src: tendrl-inventory.j2
