@@ -179,8 +179,8 @@ Vagrant.configure(2) do |config|
         vb.linked_clone = true
 
         # Set VM resources
-        vb.memory = 2048
-        vb.cpus = 2
+        vb.memory = VMMEM
+        vb.cpus = VMCPU
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
@@ -265,6 +265,9 @@ Vagrant.configure(2) do |config|
 
         # private VM-only network where GlusterFS traffic will flow
         override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
+
+        # Make this a linked clone for cow snapshot based root disks
+        vb.linked_clone = true
 
         # Set VM resources
         vb.memory = 2048
