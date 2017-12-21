@@ -84,13 +84,17 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
 ## More info
-* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user - this should allow you to continue offline from here
+* After starting the RHGS VMs:
+  * the hosts file is prepopulated
+  * all glusters packages are pre-installed (allows you to continue offline)
+  * the RHEL images are subscribed to YUM repositories on the RHT VPN
+  * a gdeploy.conf is in the home directory of the vagrant user
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
   * all block devices have been set up of VGs, LVs, formatted and mounted (`gdeploy`'s standard backend-setup)
   * brick directories have been created
-* If you decideed to deploy tendrl
+* If you decided to deploy tendrl
   * an additional VM will run tendrl server components
   * the Ansible inventory and tendrl install playbook have been generated
   * the installation playbook has been executed on the Tendrl server and RHGS nodes
