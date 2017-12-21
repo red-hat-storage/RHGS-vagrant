@@ -267,8 +267,8 @@ Vagrant.configure(2) do |config|
         override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
 
         # Set VM resources
-        vb.memory = VMMEM
-        vb.cpus = VMCPU
+        vb.memory = 2048
+        vb.cpus = 2
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
@@ -290,8 +290,8 @@ Vagrant.configure(2) do |config|
         override.vm.network "private_network", type: "dhcp", auto_config: false
 
         # Set VM resources
-        libvirt.memory = VMMEM
-        libvirt.cpus = VMCPU
+        libvirt.memory = 2048
+        libvirt.cpus = 2
 
         # Use virtio device drivers
         libvirt.nic_model_type = "virtio"
