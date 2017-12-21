@@ -84,7 +84,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
 ## More info
-* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user - this should allow you to continue offline as soon as you have the images downloaded
+* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user - this should allow you to continue offline from here
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
