@@ -76,7 +76,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 * After `vagrant up` you can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
 * Each VM is called RHGSx where x starts with 1
   * RHGS1 is your first VM and it counts up depending on the amount of VMs you spawn
-  * RHGS1 hosts your tendrl server if you selected to deploy it
+  * There is an additional VM called TENDRL which hosts the Gluster Web Admin Server if you selected to deploy it (URL is displayed at the end of `vagrant up`)
 * There are also other vagrant commands you should check out!
   * Try `vagrant -h` to find out about them
 * *Always make sure you are in the git repo - vagrant only works in there!*
@@ -98,7 +98,7 @@ If you - for whatever reason - do not want to use my prebuild box, you can creat
 **BEWARE** this is for advanced users only!
 
 * Get [packer](https://www.packer.io/)
-* Checkout the "packer" branch of this repository, follow the README
+* `git checkout` the "packer" branch of this repository, follow the README
 
 ## Author
 [Daniel Messer](mailto:dmesser@redhat.com) - [dmesser@redhat.com](mailto:dmesser@redhat.com) -
