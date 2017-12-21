@@ -84,6 +84,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * Try `vagrant -h` to find out about them
 * modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
+* if you want to throw away everything: `vagrant destroy -f`
 
 ## More info
 * After starting the RHGS VMs:
