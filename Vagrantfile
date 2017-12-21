@@ -11,13 +11,17 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 # Set RHGS version
 RHGS_VERSION = "rhgs-node-3.3.1-rhel-7"
 
+# Currently available versions:
+# rhgs-node-3.3.1-rhel-7
+#################
+
 # Set TENDRL version
 TENDRL_VERSION = "tendrl-server-3.3.1-rhel-7"
 
 # Currently available versions:
-# rhgs-3.3.1-rhel-7
-# rhgs-3.3.1-centos-7
+# tendrl-server-3.3.1-rhel-7
 #################
+
 
 #################
 # General VM settings applied to all VMs
@@ -99,10 +103,10 @@ if ARGV[0] == "up"
     if tendrlInit == 1
       print "\e[32m\nAlso, I will initialize the cluster for you and deploy the web admin console (tendrl)\e[37m\n\n"
     else
-      print "\e[32m\nAlso, I will initialize the cluster for you and leave tendrl inventory/playbook for your convenience\e[37m\n\n"
+      print "\e[32m\nAlso, I will initialize the cluster for you using gdeploy.\e[37m\n\n"
     end
   else
-    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf and a tendrl inventory/playbook for your convenience\e[37m\n\n"
+    print "\e[32m\nAlso, I will not initialize the cluster but leave a gdeploy.conf for your convenience\e[37m\n\n"
   end
 
   system "sleep 1"
@@ -262,9 +266,12 @@ Vagrant.configure(2) do |config|
         # private VM-only network where GlusterFS traffic will flow
         override.vm.network "private_network", type: "dhcp", nic_type: "virtio", auto_config: false
 
+        # Make this a linked clone for cow snapshot based root disks
+        vb.linked_clone = true
+
         # Set VM resources
-        vb.memory = VMMEM
-        vb.cpus = VMCPU
+        vb.memory = 2048
+        vb.cpus = 2
 
         # Don't display the VirtualBox GUI when booting the machine
         vb.gui = false
@@ -286,8 +293,8 @@ Vagrant.configure(2) do |config|
         override.vm.network "private_network", type: "dhcp", auto_config: false
 
         # Set VM resources
-        libvirt.memory = VMMEM
-        libvirt.cpus = VMCPU
+        libvirt.memory = 2048
+        libvirt.cpus = 2
 
         # Use virtio device drivers
         libvirt.nic_model_type = "virtio"

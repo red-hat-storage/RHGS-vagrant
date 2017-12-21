@@ -57,7 +57,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * install git
     * `brew install git`
   * install ansible
-    * `pip install ansible`
+    * `brew install ansible`
 
 
 ## Get started
@@ -66,6 +66,8 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * `git clone https://github.com/dmesser/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant`
+  * if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
+    * `export LIBVIRT_STORAGE_POOL=images`
 * Run `vagrant up`
   * Decide how many RHGS nodes and how many bricks you need
   * Decide if you want vagrant to initialize the cluster (`gdeploy`) for you
@@ -73,22 +75,34 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * Wait a while
 
 ## Usage
-* After `vagrant up` you can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
-* Each VM is called RHGSx where x starts with 1
-  * RHGS1 is your first VM and it counts up depending on the amount of VMs you spawn
-  * RHGS1 hosts your tendrl server if you selected to deploy it
-* There are also other vagrant commands you should check out!
-  * Try `vagrant -h` to find out about them
 * *Always make sure you are in the git repo - vagrant only works in there!*
-* modify the `RHGS_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster versions (tendrl is currently RHEL-only)
+* After `vagrant up` you can connect to each VM with `vagrant ssh` and the name of the VM you want to connect to
+* Each VM is called `RHGSx` where x starts with 1
+  * RHGS1 is your first VM and it counts up depending on the amount of VMs you spawn
+  * There is an additional VM called `TENDRL` which hosts the Gluster Web Admin Server if you selected to deploy it (URL is displayed at the end of `vagrant up`)
+* There are also other vagrant commands you should check out!
+  * if you want to throw away everything: `vagrant destroy -f`
+  * if you want to freeze the VMs and continue later: `vagrant suspend`
+  * Try `vagrant -h` to find out about them
+* modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
+* modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
 ## More info
-* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user
+* After starting the RHGS VMs:
+  * the hosts file is prepopulated
+  * all glusters packages are pre-installed (allows you to continue offline)
+  * the RHEL images are subscribed to YUM repositories on the RHT VPN
+  * a gdeploy.conf is in the home directory of the vagrant user
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
   * all block devices have been set up of VGs, LVs, formatted and mounted (`gdeploy`'s standard backend-setup)
   * brick directories have been created
+* If you decided to deploy tendrl
+  * an additional VM will run tendrl server components
+  * the Ansible inventory and tendrl install playbook have been generated
+  * the installation playbook has been executed on the Tendrl server and RHGS nodes
+  * the Tendrl UI is reachable on the IP address of the eth1 adapter of the Tendrl VM (the URL also displayed after the installer finished)
 
 
 ### Creating your own vagrant box
@@ -98,7 +112,7 @@ If you - for whatever reason - do not want to use my prebuild box, you can creat
 **BEWARE** this is for advanced users only!
 
 * Get [packer](https://www.packer.io/)
-* Checkout the "packer" branch of this repository, follow the README
+* `git checkout` the "packer" branch of this repository, follow the README
 
 ## Author
 [Daniel Messer](mailto:dmesser@redhat.com) - [dmesser@redhat.com](mailto:dmesser@redhat.com) -
