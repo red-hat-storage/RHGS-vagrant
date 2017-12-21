@@ -1,0 +1,19 @@
+---
+
+# - name: install firewalld
+#   yum: name=firewalld state=present
+#
+# - name: enable and start firewalld
+#   service: name=firewalld state=started enabled=yes
+
+- name: open required ports on gluster network
+  firewalld:
+    port: "{{ item }}"
+    zone: internal
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 8697/tcp
+
+...

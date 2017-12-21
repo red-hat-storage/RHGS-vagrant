@@ -1,0 +1,8 @@
+---
+
+- name: disable tendrl node services
+  service: name={{ item }} state=stopped enabled=no
+  with_items:
+    - tendrl-node-agent
+
+...

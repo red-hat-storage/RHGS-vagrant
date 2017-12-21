@@ -1,0 +1,104 @@
+{
+  "variables": {
+    "iso_file_path": "{{env `ISO_FILE_PATH`}}",
+    "output_directory": "{{env `OUTPUT_DIRECTORY`}}"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<up><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhgs-centos-7-ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": 20480,
+      "guest_os_type": "RedHat_64",
+      "headless": true,
+      "http_directory": "kickstart",
+      "iso_url": "{{ user `iso_file_path` }}",
+      "iso_checksum_type": "sha256",
+      "iso_checksum": "ec7500d4b006702af6af023b1f8f1b890b6c7ee54400bb98cef968b883cd6546",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "900s",
+      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+      "post_shutdown_delay": "1m",
+      "guest_additions_path": "vbox_guest_additions.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "iso_interface": "sata",
+      "hard_drive_interface": "sata",
+      "format": "ova",
+      "vm_name": "packer-rhgs-3.3.1-centos-7",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--vram",
+          "32"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--nic1",
+          "nat",
+          "--nictype1",
+          "virtio"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natdnshostresolver1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natdnsproxy1",
+          "on"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--audio",
+          "none"
+        ],
+        [
+          "storagectl",
+          "{{.Name}}",
+          "--name",
+          "IDE Controller",
+          "--remove"
+        ]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+    "type": "ansible",
+    "user": "vagrant",
+    "playbook_file": "ansible/virtualbox-rhgs-3.3.1-centos-7.yml",
+    "extra_arguments": [
+        "--become"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level": 9,
+      "output": "{{ user `output_directory` }}/virtualbox-rhgs-3.3.1-centos-7.box"
+    }
+  ]
+}

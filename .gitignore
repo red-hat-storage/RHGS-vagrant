@@ -1,4 +1,6 @@
+packer/inventory
 packer_cache
+*.retry
 .vagrant
 disks
 ssh_conf
@@ -8,5 +10,6 @@ vagrant_env.conf
 *.box
 packer_vars
 vagrant_env.conf
+packer/output-*
 *.retry
 ansible/fetch
