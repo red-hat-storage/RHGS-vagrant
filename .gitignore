@@ -8,3 +8,5 @@ vagrant_env.conf
 *.box
 packer_vars
 vagrant_env.conf
+*.retry
+ansible/fetch

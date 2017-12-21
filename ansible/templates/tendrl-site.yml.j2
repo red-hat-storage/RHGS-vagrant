@@ -1,0 +1,95 @@
+---
+# This is an example of a ansible playbook to install Tendrl, automating steps
+# from upstream *Tendrl Package Installation Reference*. You need to review it
+# and either tweak it or use it as a starting point before installing
+# Tendrl.
+
+# The playbook expects inventory file with the following groups:
+#
+# * tendrl-server: a single machine where Tendrl Server (management console) is
+#                  installed
+# * gluster-servers: gluster storage servers (machines with bricks)
+#
+# Note that this is just an example which holds for this playbook, tendrl roles
+# doesn't care how you group your servers in ansible inventory.
+
+#
+# Validation of prerequisities for Tendrl, doesn't modify machines in any way.
+#
+
+#- include: /usr/share/doc/tendrl-ansible-1.5.4/prechecks.yml
+
+#
+# Run yum update.
+#
+
+#- hosts: all
+#  user: root
+#  tasks:
+#    - name: Update all installed packages
+#      yum:
+#        name: '*'
+#        state: latest
+
+#
+# Installation of Tendrl itself.
+#
+
+- hosts: tendrl-server
+  user: vagrant
+  # When you uncomment this here (eg. because you are using sudo to switch to
+  # root user account on the remote machines, make sure you change it in all
+  # playbooks in this directory as well)
+  become: yes
+  vars:
+
+    [% set first_host = groups['tendrl-server']|first %]
+    [% set etcd_fqdn = hostvars[first_host].ansible_hostname  + ".local" %]
+    [% set etcd_nic = hostvars[first_host].ansible_interfaces | difference(["lo",hostvars[first_host].ansible_default_ipv4.alias]) | first %]
+    [% set etcd_nic_ip = hostvars[first_host]["ansible_" + etcd_nic]["ipv4"]["address"] %]
+
+    # You need to specify fqdn where etcd will be listening, either by
+    # value based on prior knowledge of your infrastructure:
+    # etcd_fqdn: 'tendrl.example.com'
+    # or using ansible facts: fqdn of tendrl-server as detected by ansible:
+    etcd_fqdn: "[[ etcd_fqdn ]]"
+    # Moreover you need to use ip address of interface where etcd will be
+    # listening, to configure etcd itself.
+    etcd_ip_address: "[[ etcd_nic_ip ]]"
+
+    # fqdn of graphite instance (carbon-cache service in particular) which will
+    # be used in tendrl config files (this value doesn't reconfigure
+    # graphite).
+    # Note that a safe default value for fqdn of graphite is the same one
+    # we use for etcd here (tendrl-server role places both services on the same
+    # machine).
+    graphite_fqdn: "[[ etcd_fqdn ]]"
+  pre_tasks:
+    - name: Check that variables are defined properly (just to make this clear)
+      assert:
+        that:
+          - etcd_fqdn is defined
+          - etcd_ip_address is defined
+          - graphite_fqdn is defined
+  roles:
+    - tendrl-ansible.tendrl-server
+
+- hosts: gluster-servers
+  user: vagrant
+  become: yes
+  vars:
+    # make sure this value is the same
+    etcd_fqdn: "{{ hostvars[groups['tendrl-server'][0]].ansible_fqdn }}"
+    graphite_fqdn: "{{ hostvars[groups['tendrl-server'][0]].ansible_fqdn }}"
+  roles:
+    - tendrl-ansible.tendrl-storage-node
+
+- hosts: tendrl-server
+  user: vagrant
+  become: yes
+  vars:
+    second_nic: "{{ hostvars[groups['tendrl-server'][0]].ansible_interfaces | difference(['lo',ansible_default_ipv4.alias]) | first }}"
+    second_nic_ip: "{{ hostvars[groups['tendrl-server'][0]]['ansible_' + second_nic]['ipv4']['address'] }}"
+  tasks:
+    - name: "Provisioning finished!"
+      debug: msg="Gluster Web Admin (tendrl) is running at http://{{ second_nic_ip }}/ - username = 'admin' / password = 'adminuser'"
