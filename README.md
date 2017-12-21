@@ -57,7 +57,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * install git
     * `brew install git`
   * install ansible
-    * `pip install ansible`
+    * `brew install ansible`
 
 
 ## Get started
@@ -81,14 +81,20 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * Try `vagrant -h` to find out about them
 * *Always make sure you are in the git repo - vagrant only works in there!*
 * modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
+* modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
 ## More info
-* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user
+* After starting the VMs, the hosts file is prepopulated and all packages are installed, a gdeploy.conf is in the home directory of the vagrant user - this should allow you to continue offline as soon as you have the images downloaded
 * If you decided to have vagrant initialize the cluster
   * gdeploy was executed with the gdeploy.conf file
   * cluster is peered
   * all block devices have been set up of VGs, LVs, formatted and mounted (`gdeploy`'s standard backend-setup)
   * brick directories have been created
+* If you decideed to deploy tendrl
+  * an additional VM will run tendrl server components
+  * the Ansible inventory and tendrl install playbook have been generated
+  * the installation playbook has been executed on the Tendrl server and RHGS nodes
+  * the Tendrl UI is reachable on the IP address of the eth1 adapter of the Tendrl VM (the URL also displayed after the installer finished)
 
 
 ### Creating your own vagrant box
