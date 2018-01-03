@@ -107,7 +107,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 
 ### Creating your own vagrant box
 
-If you - for whatever reason - do not want to use my prebuild box, you can create your own box very easy!  
+If you - for whatever reason - do not want to use my prebuilt box, you can create your own box very easy!  
 
 **BEWARE** this is for advanced users only!
 
