@@ -63,7 +63,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
 ## Get started
 * You **must** be in the Red Hat VPN
 * Clone this repository
-  * `git clone https://github.com/dmesser/RHGS-vagrant.git`
+  * `git clone https://github.com/red-hat-storage/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant`
   * if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
