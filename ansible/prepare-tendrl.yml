@@ -41,14 +41,6 @@
       key: "{{ lookup('file', 'fetch/id_rsa.pub') }}"
       state: present
 
-  - name: disable host key checking
-    blockinfile:
-      path: /home/vagrant/.ssh/config
-      block: |
-        Host TENDRL*
-        StrictHostKeyChecking no
-        UserKnownHostsFile /dev/null
-
   - name: generate tendrl inventory
     template:
       src: tendrl-inventory.j2
