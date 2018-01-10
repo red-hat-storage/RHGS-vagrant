@@ -13,6 +13,7 @@
     - network-setup
     - vbox-guest-additions
     - authorized-key
+    - sshd-config
     - tendrl-server
 
 ...
