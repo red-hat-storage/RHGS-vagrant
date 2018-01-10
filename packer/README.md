@@ -13,7 +13,9 @@ This directory holds packer configuration files for the following combinations o
 
 
 ## Requirements
-* [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30)
+* macOS with [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (starting 5.1.30) **or**
+* RHEL 7.4/Fedora 27 with KVM/libvirt
+* [Vagrant](https://www.vagrantup.com) (starting 1.9.1)
 * [Packer](https://www.packer.io) (starting 1.1.3)
 * [Ansible](https://ansible.com) (starting 2.4.2.0)
 * git
@@ -22,7 +24,7 @@ This directory holds packer configuration files for the following combinations o
 
 ## Get started
 * Create an output directory for the resulting .box file (e.g. /tmp/rhgs-rhel-7-virtualbox)
-* Download RHEL 7.4 Binary DVD ISO
+* Download OS disc ISO (e.g. RHEL 7.4 Binary DVD)
   * put it somewhere (e.g. /tmp/rhel-server-7.4-x86_64-dvd.iso)
 * Clone this repository
   * `git clone -b packer https://github.com/dmesser/RHGS-vagrant.git`

@@ -13,6 +13,7 @@
     - network-setup
     - qemu-guest-agent
     - authorized-key
+    - sshd-config
     - tendrl-server
 
 ...
