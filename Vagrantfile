@@ -63,7 +63,7 @@ if ARGV[0] == "up"
   print "\e[1;37mDo you want me to initialize the cluster for you? [no] \e[32m"
 
   while clusterInit == -1
-    clusterInitResponse = $stdin.gets.strip.to_s
+    clusterInitResponse = $stdin.gets.strip.to_s.downcase
 
     if clusterInitResponse == 'yes' or clusterInitResponse == 'y'
       clusterInit = 1
@@ -71,7 +71,7 @@ if ARGV[0] == "up"
       print "\e[1;37mDo you want me to deploy the web admin (tendrl) node for you? [no] \e[32m"
 
       while tendrlInit == -1
-        tendrlInitResponse = $stdin.gets.strip.to_s
+        tendrlInitResponse = $stdin.gets.strip.to_s.downcase
 
         if tendrlInitResponse == 'yes' or tendrlInitResponse == 'y'
           tendrlInit = 1
