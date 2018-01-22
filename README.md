@@ -59,6 +59,19 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * install ansible
     * `brew install ansible`
 
+## Make sure you are up-to-date
+
+If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you are using the most current images:
+
+* run `git pull` in the RHGS-vagrant directory to pull the latest updates for the Vagrant automation
+* from time-to-time new images are released (especially for async version updates)
+  * run `rm ~/.vagrant.d/boxes/rhgs-*.box` and `rm ~/.vagrant.d/boxes/tendrl-*.box` to delete older Vagrant images
+  * on VirtualBox - remove the VM instances named `packer-tendrl-server-...` and `packer-rhgs-node-...` (these are base images for the clones)
+  * on libvirt
+    * run `virsh vol-list default` to list all images in your `default` storage pool (adjust the name if you are using a different one)
+    * run `virsh vol-delete rhgs-node-... default` and  `virsh vol-delete tendrl-server-... default` to delete the images starting with `rhgs-node-...` and `tendrl-server-...` (replace with full name) from the default pool
+
+Next time you do `vagrant up` it will automatically pull new images.
 
 ## Get started
 * You **must** be in the Red Hat VPN
@@ -84,6 +97,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * if you want to throw away everything: `vagrant destroy -f`
   * if you want to freeze the VMs and continue later: `vagrant suspend`
   * Try `vagrant -h` to find out about them
+  * if you run `vagrant up` again you without running `vagrant destroy` before you will overwrite your configuration and vagrant may loose track of some VMs (it's safe to remove them manually)
 * modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
