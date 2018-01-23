@@ -60,7 +60,7 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
     * `brew install ansible`
 
 ## Make sure you are up-to-date
-If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you up-to-date:
+If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you are up-to-date:
 
 * run `git pull` in the RHGS-vagrant directory to pull the latest updates for the Vagrant automation
 
