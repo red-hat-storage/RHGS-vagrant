@@ -117,8 +117,12 @@ If you like to clean up disk space or there are updates to the images do the fol
 
 Next time you do `vagrant up` it will automatically pull new images.
 
-### Creating your own vagrant box
+## Known issues
+* `vagrant up` overrides your state - if there are still VMs running and you do `vagrant up` it will override the `vagrant_env.conf` and vagrant will loose track of your existing VMs
+  * try to remember to run `vagrant destroy -f` before you do another `vagrant up`
+  * delete left-over VMs manually in case you forgot
 
+## Creating your own vagrant box
 If you - for whatever reason - do not want to use my prebuilt box, you can create your own box very easy!  
 
 **BEWARE** this is for advanced users only!
