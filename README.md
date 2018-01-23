@@ -59,19 +59,15 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * install ansible
     * `brew install ansible`
 
-## Make sure you are up-to-date
-If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you up-to-date:
-
-* run `git pull` in the RHGS-vagrant directory to pull the latest updates for the Vagrant automation
-
 ## Get started
 * You **must** be in the Red Hat VPN
 * Clone this repository
   * `git clone https://github.com/red-hat-storage/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant`
-  * if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
-    * `export LIBVIRT_STORAGE_POOL=images`
+* if you are a returning user run `git pull` to ensure you have the latest updates
+* if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
+  * `export LIBVIRT_STORAGE_POOL=images`
 * Run `vagrant up`
   * Decide how many RHGS nodes and how many bricks you need
   * Decide if you want vagrant to initialize the cluster (`gdeploy`) for you
