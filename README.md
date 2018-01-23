@@ -122,7 +122,7 @@ Next time you do `vagrant up` it will automatically pull new images.
   * try to remember to run `vagrant destroy -f` before you do another `vagrant up`
   * delete left-over VMs manually in case you forgot
 
-### Creating your own vagrant box
+## Creating your own vagrant box
 
 If you - for whatever reason - do not want to use my prebuilt box, you can create your own box very easy!  
 
