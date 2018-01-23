@@ -101,7 +101,7 @@ Next time you do `vagrant up` it will automatically pull new images.
 * modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
-## More info
+## What happens under the covers
 * After starting the RHGS VMs:
   * the hosts file is prepopulated
   * all glusters packages are pre-installed (allows you to continue offline)
