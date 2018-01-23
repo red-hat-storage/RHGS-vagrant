@@ -60,18 +60,9 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
     * `brew install ansible`
 
 ## Make sure you are up-to-date
-
-If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you are using the most current images:
+If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you up-to-date:
 
 * run `git pull` in the RHGS-vagrant directory to pull the latest updates for the Vagrant automation
-* from time-to-time new images are released (especially for async version updates)
-  * run `rm ~/.vagrant.d/boxes/rhgs-*.box` and `rm ~/.vagrant.d/boxes/tendrl-*.box` to delete older Vagrant images
-  * on VirtualBox - remove the VM instances named `packer-tendrl-server-...` and `packer-rhgs-node-...` (these are base images for the clones)
-  * on libvirt
-    * run `virsh vol-list default` to list all images in your `default` storage pool (adjust the name if you are using a different one)
-    * run `virsh vol-delete rhgs-node-... default` and  `virsh vol-delete tendrl-server-... default` to delete the images starting with `rhgs-node-...` and `tendrl-server-...` (replace with full name) from the default pool
-
-Next time you do `vagrant up` it will automatically pull new images.
 
 ## Get started
 * You **must** be in the Red Hat VPN
@@ -118,6 +109,17 @@ Next time you do `vagrant up` it will automatically pull new images.
   * the installation playbook has been executed on the Tendrl server and RHGS nodes
   * the Tendrl UI is reachable on the IP address of the eth1 adapter of the Tendrl VM (the URL also displayed after the installer finished)
 
+## Clean up / Refresh images
+
+If you like to clean up disk space or there are updates to the images do the following:
+
+* run `rm ~/.vagrant.d/boxes/rhgs-*.box` and `rm ~/.vagrant.d/boxes/tendrl-*.box` to delete older Vagrant images
+* on VirtualBox - remove the VM instances named `packer-tendrl-server-...` and `packer-rhgs-node-...` (these are base images for the clones)
+* on libvirt
+  * run `virsh vol-list default` to list all images in your `default` storage pool (adjust the name if you are using a different one)
+  * run `virsh vol-delete rhgs-node-... default` and  `virsh vol-delete tendrl-server-... default` to delete the images starting with `rhgs-node-...` and `tendrl-server-...` (replace with full name) from the default pool
+
+Next time you do `vagrant up` it will automatically pull new images.
 
 ### Creating your own vagrant box
 
