@@ -123,7 +123,6 @@ Next time you do `vagrant up` it will automatically pull new images.
   * delete left-over VMs manually in case you forgot
 
 ## Creating your own vagrant box
-
 If you - for whatever reason - do not want to use my prebuilt box, you can create your own box very easy!  
 
 **BEWARE** this is for advanced users only!
