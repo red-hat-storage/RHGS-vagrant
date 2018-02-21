@@ -59,28 +59,15 @@ Optionally you can choose to deploy the management UI [tendrl](github.com/tendrl
   * install ansible
     * `brew install ansible`
 
-## Make sure you are up-to-date
-
-If you have satisfied all the requirements and you ran RHGS-vagrant before, ensure from time to time that you are using the most current images:
-
-* run `git pull` in the RHGS-vagrant directory to pull the latest updates for the Vagrant automation
-* from time-to-time new images are released (especially for async version updates)
-  * run `rm ~/.vagrant.d/boxes/rhgs-*.box` and `rm ~/.vagrant.d/boxes/tendrl-*.box` to delete older Vagrant images
-  * on VirtualBox - remove the VM instances named `packer-tendrl-server-...` and `packer-rhgs-node-...` (these are base images for the clones)
-  * on libvirt
-    * run `virsh vol-list default` to list all images in your `default` storage pool (adjust the name if you are using a different one)
-    * run `virsh vol-delete rhgs-node-... default` and  `virsh vol-delete tendrl-server-... default` to delete the images starting with `rhgs-node-...` and `tendrl-server-...` (replace with full name) from the default pool
-
-Next time you do `vagrant up` it will automatically pull new images.
-
 ## Get started
 * You **must** be in the Red Hat VPN
 * Clone this repository
   * `git clone https://github.com/red-hat-storage/RHGS-vagrant.git`
 * Goto the folder in which you cloned this repo
   * `cd RHGS-vagrant`
-  * if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
-    * `export LIBVIRT_STORAGE_POOL=images`
+* if you are a returning user run `git pull` to ensure you have the latest updates
+* if you are on RHEL/Fedora and your don't want your libvirt storage domain `default` to be used, override the storage domain like this
+  * `export LIBVIRT_STORAGE_POOL=images`
 * Run `vagrant up`
   * Decide how many RHGS nodes and how many bricks you need
   * Decide if you want vagrant to initialize the cluster (`gdeploy`) for you
@@ -101,7 +88,7 @@ Next time you do `vagrant up` it will automatically pull new images.
 * modify the `RHGS_VERSION` / `TENDRL_VERSION` parameter in the `Vagrantfile` for different combinations of OS and Gluster/Tendrl versions
 * modify the `VMMEM` and `VMCPU` variables in the Vagrant file to change RHGS VM resources, adjust `VMDISK` to change brick device sizes
 
-## More info
+## What happens under the covers
 * After starting the RHGS VMs:
   * the hosts file is prepopulated
   * all glusters packages are pre-installed (allows you to continue offline)
@@ -118,9 +105,24 @@ Next time you do `vagrant up` it will automatically pull new images.
   * the installation playbook has been executed on the Tendrl server and RHGS nodes
   * the Tendrl UI is reachable on the IP address of the eth1 adapter of the Tendrl VM (the URL also displayed after the installer finished)
 
+## Clean up / Refresh images
 
-### Creating your own vagrant box
+If you like to clean up disk space or there are updates to the images do the following:
 
+* run `rm ~/.vagrant.d/boxes/rhgs-*.box` and `rm ~/.vagrant.d/boxes/tendrl-*.box` to delete older Vagrant images
+* on VirtualBox - remove the VM instances named `packer-tendrl-server-...` and `packer-rhgs-node-...` (these are base images for the clones)
+* on libvirt
+  * run `virsh vol-list default` to list all images in your `default` storage pool (adjust the name if you are using a different one)
+  * run `virsh vol-delete rhgs-node-... default` and  `virsh vol-delete tendrl-server-... default` to delete the images starting with `rhgs-node-...` and `tendrl-server-...` (replace with full name) from the default pool
+
+Next time you do `vagrant up` it will automatically pull new images.
+
+## Known issues
+* `vagrant up` overrides your state - if there are still VMs running and you do `vagrant up` it will override the `vagrant_env.conf` and vagrant will loose track of your existing VMs
+  * try to remember to run `vagrant destroy -f` before you do another `vagrant up`
+  * delete left-over VMs manually in case you forgot
+
+## Creating your own vagrant box
 If you - for whatever reason - do not want to use my prebuilt box, you can create your own box very easy!  
 
 **BEWARE** this is for advanced users only!
