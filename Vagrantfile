@@ -8,6 +8,34 @@ VAGRANT_ROOT = File.dirname(File.expand_path(__FILE__))
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 #################
+# Poor man's OS detection routine
+#################
+module OS
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.mac?
+        (/darwin/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.linux?
+        not OS.windows? and not OS.mac?
+    end
+end
+
+#################
+# Set vagrant default provider according to OS detected
+#################
+if OS.windows?
+  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+elsif OS.mac?
+  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+elsif OS.linux?
+  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+end
+
+#################
 # Set RHGS version
 RHGS_VERSION = "rhgs-node-3.3.1-rhel-7"
 
